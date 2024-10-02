@@ -1,0 +1,32 @@
+{
+    "STEPS" : {
+        "STEP1" : {
+            "NAME" : "Run3Summer22wmLHEGEN",
+            "CMSSW_VERSION" : "CMSSW_12_4_14_patch3",
+            "SCRAM_ARCH" : "el8_amd64_gcc10",
+            "OPTIONS" : {
+                "fileout" : "file:wmLHEGEN.root",
+                "mc" : null,
+                "eventcontent" : "RAWSIM,LHE",
+                "datatier" : "GEN,LHE",
+                "conditions" : "124X_mcRun3_2022_realistic_v12",
+                "beamspot" : "NoSmear",
+                "step" : "LHE,GEN",
+                "geometry" : "DB:Extended",
+                "era" : "Run3"
+            },
+            "CUSTOMIZES" : {
+                "files" : ["others/delphes.tgz"],
+                "pre-cmsRun" : [],
+                "post-cmsRun" :["cp $SUB_PATH/inputs/delphes.tgz ./",
+                                "tar -xf delphes.tgz",
+                                "cd delphes",
+                                "make",
+                                "cd ..",
+                                "./delphes/DelphesCMSFWLite delphes/cards/delphes_card_CMS.tcl Delphes.root wmLHEGEN.root"
+                               ]
+            }
+        }
+    },
+    "KEEP_OUTPUTS": [ "Delphes.root" ]
+}

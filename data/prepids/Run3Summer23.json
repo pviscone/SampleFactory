@@ -1,0 +1,23 @@
+{
+    "SCRAM_ARCH": "el8_amd64_gcc10",
+    "STEPS": {
+        "Run3Summer23wmLHEGS" : {
+            "prepid" : "GEN-Run3Summer23wmLHEGS-00382",
+            "note" : ""
+        },
+        "Run3Summer23DRPremix" : {
+            "prepid" : "GEN-Run3Summer23DRPremix-00287",
+            "note" : ""
+        },
+        "Run3Summer23MiniAODv4" : {
+            "prepid" : "GEN-Run3Summer23MiniAODv4-00287",
+            "note" : ""
+        },
+        "Run3Summer23NanoAODv12" : {
+            "prepid" : "GEN-Run3Summer23NanoAODv12-00312",
+            "note" : ""
+        }
+    },
+    "note" : "WGtoLNuG-1Jets_PTG-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8"
+}
+

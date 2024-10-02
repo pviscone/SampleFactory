@@ -1,0 +1,7 @@
+*MyProxy
+jobs
+configs/user_*.json
+!user_simpson.json
+!user_shjeon.json
+*.pyc
+tmp
