@@ -1,0 +1,29 @@
+{
+    "STEPS" : [
+        "Run3Summer22wmLHEGEN"
+    ],
+    "KEEPS" : [
+        "Run3Summer22wmLHEGEN"
+    ],
+    "WORKFLOWS" : {
+        "Run3Summer22wmLHEGEN" : {
+            "CMSSW_VERSION" : "CMSSW_12_4_20",
+            "SCRAM_ARCH" : "el8_amd64_gcc10",
+            "OPTIONS" : {
+                "mc" : null,
+                "eventcontent" : "GEN",
+                "datatier" : "GEN",
+                "conditions" : "124X_mcRun3_2022_realistic_v12",
+                "beamspot" : "Realistic25ns13p6TeVEarly2022Collision",
+                "step" : "LHE,GEN",
+                "geometry" : "DB:Extended",
+                "era" : "Run3"
+            },
+            "CUSTOMIZES" : {
+                "files" : [],
+                "pre-cmsRun" : [],
+                "post-cmsRun" :[]
+            }
+        }
+    }
+}
