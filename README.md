@@ -1,4 +1,7 @@
 # Release Notes
+
+Please check [link](https://gitlab.cern.ch/shjeon/sample_factory/-/releases).
+
 - 2024/10/01 : v1.0.beta
 
 # Sample Factory
