@@ -1,3 +1,6 @@
+# Release Notes
+- 2024/10/01 : v1.0.beta
+
 # Sample Factory
 
 These set of scripts faciliate the production of private MC samples for CMS analyses (and possibly extend to other use cases in the future). Most of it is copy pasted ~~by hand~~ from McM website [link](https://cms-pdmv-prod.web.cern.ch/mcm/) but organized in JSON format for easier maintenance purposes. As there is no automatized way to parse the chains from McM, it needs to be maintained from time to time by hand.
@@ -34,7 +37,7 @@ If you are unsure on what to do, easiest way to start is by copy pasting below t
 ```
 {
     "XROOTD_HOST" : "root://eosuser.cern.ch/",
-    "LFN_PATH" : "/eos/user/${USER:0:1}/${USER}"
+    "LFN_PATH" : "/eos/user/s/simpson"
 }
 ```
 
@@ -112,6 +115,11 @@ If you want a new chain that does not exist in this repository or if you want to
 **NOT UPDATED YET** Function in place `getPileup.py` and working but just missing documentation for now.
 
 # Logs
+- 2024/10/01
+  - Deploying v1.0.beta
+  - Rebased the branch to make it clean
+  - Added CI/CD test
+
 - 2024/09/25
   - Added the chain collector to mine the cmsDriver commands from McM validation script
   - Added all 2022 and 2023 campaigns available as of today
