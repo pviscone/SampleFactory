@@ -91,7 +91,7 @@
                   "SCRAM_ARCH": "el8_amd64_gcc10",
                   "CMSSW_VERSION": "CMSSW_13_0_13",
                   "OPTIONS": {
-                        "eventcontent": "NANOEDMAODSIM",
+                        "eventcontent": "NANOAODSIM",
                         "datatier": "NANOAODSIM",
                         "conditions": "130X_mcRun3_2022_realistic_v5",
                         "step": "NANO",
