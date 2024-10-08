@@ -65,6 +65,9 @@ def CmsDriverParser(line):
             if next_arg.startswith("-"):
                 options[this_arg.replace("-", "")] = None
             else:
+                if next_arg == "NANOEDMAODSIM":
+                    # change EDM NanoAOD to flat NanoAOD
+                    next_arg = "NANOAODSIM"
                 options[this_arg.replace("-", "")] = next_arg
     return options
 
