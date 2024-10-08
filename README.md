@@ -2,6 +2,7 @@
 
 Please check [link](https://gitlab.cern.ch/shjeon/sample_factory/-/releases).
 
+- 2024/10/08 : v1.0
 - 2024/10/01 : v1.0.beta
 
 # Sample Factory
@@ -118,6 +119,10 @@ If you want a new chain that does not exist in this repository or if you want to
 **NOT UPDATED YET** Function in place `getPileup.py` and working but just missing documentation for now.
 
 # Logs
+- 2024/10/08
+  - Deploying v1.0
+  - NanoAOD fixed : Forcing flat nano instead of edm nano
+
 - 2024/10/01
   - Deploying v1.0.beta
   - Rebased the branch to make it clean
