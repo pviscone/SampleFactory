@@ -1,0 +1,108 @@
+{
+      "STEPS": [
+            "RunIII2024Summer24wmLHEGS",
+            "RunIII2024Summer24DRPremix",
+            "RunIII2024Summer24DRPremixStep1",
+            "RunIII2024Summer24MiniAOD",
+            "RunIII2024Summer24NanoAOD"
+      ],
+      "KEEPS": [
+            "RunIII2024Summer24NanoAOD"
+      ],
+      "WORKFLOWS": {
+            "RunIII2024Summer24wmLHEGS": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "OPTIONS": {
+                        "eventcontent": "RAWSIM,LHE",
+                        "datatier": "GEN-SIM,LHE",
+                        "conditions": "140X_mcRun3_2024_realistic_v26",
+                        "beamspot": "DBrealistic",
+                        "step": "LHE,GEN,SIM",
+                        "geometry": "DB:Extended",
+                        "era": "Run3_2024",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": []
+                  }
+            },
+            "RunIII2024Summer24DRPremix": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "OPTIONS": {
+                        "eventcontent": "PREMIXRAW",
+                        "datatier": "GEN-SIM-RAW",
+                        "pileup_input": "\"dbs:/Neutrino_E-10_gun/RunIIISummer24PrePremix-Premixlib2024_140X_mcRun3_2024_realistic_v26-v1/PREMIX\"",
+                        "conditions": "140X_mcRun3_2024_realistic_v26",
+                        "step": "DIGI,DATAMIX,L1,DIGI2RAW,HLT:2024v14",
+                        "procModifiers": "premix_stage2",
+                        "geometry": "DB:Extended",
+                        "datamix": "PreMix",
+                        "era": "Run3_2024",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": []
+                  }
+            },
+            "RunIII2024Summer24DRPremixStep1": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "OPTIONS": {
+                        "eventcontent": "AODSIM",
+                        "datatier": "AODSIM",
+                        "conditions": "140X_mcRun3_2024_realistic_v26",
+                        "step": "RAW2DIGI,L1Reco,RECO,RECOSIM",
+                        "geometry": "DB:Extended",
+                        "era": "Run3_2024",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": []
+                  }
+            },
+            "RunIII2024Summer24MiniAOD": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "OPTIONS": {
+                        "eventcontent": "MINIAODSIM",
+                        "datatier": "MINIAODSIM",
+                        "conditions": "140X_mcRun3_2024_realistic_v26",
+                        "step": "PAT",
+                        "geometry": "DB:Extended",
+                        "era": "Run3_2024",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": []
+                  }
+            },
+            "RunIII2024Summer24NanoAOD": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "OPTIONS": {
+                        "eventcontent": "NANOAODSIM",
+                        "datatier": "NANOAODSIM",
+                        "conditions": "140X_mcRun3_2024_realistic_v26",
+                        "step": "NANO",
+                        "scenario": "pp",
+                        "era": "Run3_2024",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": []
+                  }
+            }
+      }
+}
