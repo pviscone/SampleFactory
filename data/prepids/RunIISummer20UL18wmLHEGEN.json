@@ -1,0 +1,35 @@
+{
+    "SCRAM_ARCH": "slc7_amd64_gcc700",
+    "STEPS": {
+        "RunIISummer20UL18wmLHEGEN" : {
+            "prepid" : "EXO-RunIISummer20UL18wmLHEGEN-07009",
+            "note" : ""
+        },
+        "RunIISummer20UL18SIM" : {
+            "prepid" : "EXO-RunIISummer20UL18SIM-06587",
+            "note" : ""
+        },
+        "RunIISummer20UL18DIGIPremix" : {
+            "prepid" : "EXO-RunIISummer20UL18DIGIPremix-07063",
+            "note" : ""
+        },
+        "RunIISummer20UL18HLT" : {
+            "prepid" : "EXO-RunIISummer20UL18HLT-07063",
+            "note" : ""
+        },
+	    "RunIISummer20UL18RECO" : {
+            "prepid" : "EXO-RunIISummer20UL18RECO-07063",
+            "note" : ""
+	    },
+        "RunIISummer20UL18MiniAODv2" : {
+	        "prepid" : "EXO-RunIISummer20UL18MiniAODv2-07019",
+	        "note" : ""
+	    },
+        "RunIISummer20UL18NanoAODv9" : {
+	        "prepid" : "EXO-RunIISummer20UL18NanoAODv9-06966",
+	        "note" : ""
+	    }
+    },
+    "note" : "Chargino1Neutralino2_Mc1n2-200_Mlsp-188_ctau-200p0_MET100-HT200_TuneCP5_13TeV_madgraphMLM-pythia8"
+}
+
