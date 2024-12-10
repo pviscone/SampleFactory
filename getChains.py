@@ -2,6 +2,7 @@
 import os
 import sys
 import json
+import shlex
 
 from scripts.logger import Logger
 from scripts.argparser import ArgParser
@@ -52,23 +53,52 @@ class CmsDriverCollector:
         return self.workflows
 
 def CmsDriverParser(line):
-    IGNORES = ["python_filename", "customise", "filein", "fileout", "customise_commands", "n", "no_exec"]
+    IGNORES = {"python_filename", "filein", "fileout", "n", "no_exec"}
+    # ignore several customiser commands
+    CUSTOMISERS = {
+        "customise": ["Configuration/DataProcessing/Utils.addMonitoring"],
+        "customise_commands": ["process.source.numberEventsInLuminosityBlock", "process.RandomNumberGeneratorService"]
+    }
     # python_filename, filein, fileout, n, no_exec later gets added through runFactory.py
     options = {}
-    line = line.split("||")[0]
-    line = line.split("cmsDriver.py")[1]
-    args = line.split(" ")
-    args.remove("")
-    for index, this_arg in enumerate(args):
-        if this_arg.startswith("-") and (not this_arg.replace("-", "") in IGNORES):
-            next_arg = args[index+1]
-            if next_arg.startswith("-"):
-                options[this_arg.replace("-", "")] = None
+
+    line = line.split("||")[0].strip()
+
+    if "cmsDriver.py" in line:
+        line = line.split("cmsDriver.py", 1)[1].strip()
+    else:
+        return options
+
+    args = shlex.split(line)
+
+    skip_next = False
+    for index, arg in enumerate(args):
+        if skip_next:
+            skip_next = False
+            continue
+
+        if arg.startswith("-") and arg.lstrip("-") not in IGNORES:
+            key = arg.lstrip("-")
+            next_arg = args[index + 1] if index + 1 < len(args) else None
+
+            if key in CUSTOMISERS:
+                veto_customisers = CUSTOMISERS[key]
+                if next_arg and any(next_arg.startswith(veto) for veto in veto_customisers):
+                    skip_next = True
+                    continue
+
+            if not next_arg or next_arg.startswith("-"):
+                options[key] = None
             else:
                 if next_arg == "NANOEDMAODSIM":
                     # change EDM NanoAOD to flat NanoAOD
                     next_arg = "NANOAODSIM"
-                options[this_arg.replace("-", "")] = next_arg
+                if " " in next_arg or "(" in next_arg:
+                    options[key] = f"\"{next_arg}\""
+                else:
+                    options[key] = next_arg
+                skip_next = True
+
     return options
 
 def CreateJson(workflows):

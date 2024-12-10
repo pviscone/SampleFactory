@@ -51,7 +51,24 @@ class GetPileup:
 
         pileup_dataset = pileup_dataset[0].replace("dbs:", "").replace("\"","")
         pileup_txt = f"{self.CHAIN_NAME}.txt"
-        os.system(f"dasgoclient -query='file dataset={pileup_dataset}' > data/pileups/{pileup_txt}")
+        sites = ["T1_DE_KIT_Disk", "T1_ES_PIC_Disk", "T1_FR_CCIN2P3_Disk", "T1_IT_CNAF_Disk", "T1_UK_RAL_Disk", "T1_US_FNAL_Disk", "T2_AT_Vienna", "T2_BE_IIHE", "T2_BE_UCL", "T2_CH_CERN", "T2_CH_CSCS", "T2_DE_DESY", "T2_DE_RWTH", "T2_ES_CIEMAT", "T2_ES_IFCA", "T2_FR_GRIF", "T2_FR_IPHC", "T2_IT_Bari", "T2_IT_Legnaro", "T2_IT_Pisa", "T2_IT_Rome", "T2_UK_London_Brunel", "T2_UK_London_IC", "T2_UK_SGrid_RALPP", "T2_US_Caltech", "T2_US_Florida", "T2_US_MIT", "T2_US_Nebraska", "T2_US_Purdue", "T2_US_UCSD", "T2_US_Vanderbilt", "T2_US_Wisconsin"]
+        if os.path.exists(f"data/pileups/{pileup_txt}"):
+            os.system(f"rm data/pileups/{pileup_txt}")
+        os.system(f"touch data/pileups/{pileup_txt}")
+        for site in sites:
+            Logger.WARNING(f"checking {pileup_dataset} in {site}")
+            #print (f"dasgoclient -query='file dataset={pileup_dataset} site={site}'")
+            os.system(f"dasgoclient -query='file dataset={pileup_dataset} site={site}' >> data/pileups/{pileup_txt}")
+            os.system(f"sort data/pileups/{pileup_txt} > data/pileups/__{pileup_txt}")
+            os.system(f"uniq data/pileups/__{pileup_txt} > data/pileups/{pileup_txt}")
+            os.system(f"rm data/pileups/__{pileup_txt}")
+        with open(f"data/pileups/{pileup_txt}") as rf:
+            nfiles = len(rf.readlines())
+            Logger.INFO(f"collected {nfiles} files for {pileup_dataset}")
+            if nfiles == 0:
+                Logger.WARNING(f"wasn't able to collect any files for {pileup_dataset}")
+                Logger.WARNING(f"querying DAS for full dataset")
+                os.system(f"dasgoclient -query='file dataset={pileup_dataset}' > data/pileups/{pileup_txt}")
 
 if __name__ == "__main__":
     GetPileup()

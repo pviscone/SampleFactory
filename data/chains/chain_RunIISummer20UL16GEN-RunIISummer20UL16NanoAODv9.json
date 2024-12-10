@@ -57,7 +57,7 @@
                   "OPTIONS": {
                         "eventcontent": "PREMIXRAW",
                         "datatier": "GEN-SIM-DIGI",
-                        "pileup_input": "\"dbs:/Neutrino_E-10_gun/RunIISummer20ULPrePremix-UL16_106X_mcRun2_asymptotic_v13-v1/PREMIX\"",
+                        "pileup_input": "dbs:/Neutrino_E-10_gun/RunIISummer20ULPrePremix-UL16_106X_mcRun2_asymptotic_v13-v1/PREMIX",
                         "conditions": "106X_mcRun2_asymptotic_v13",
                         "step": "DIGI,DATAMIX,L1,DIGI2RAW",
                         "procModifiers": "premix_stage2",
@@ -78,10 +78,11 @@
                   "CMSSW_VERSION": "CMSSW_8_0_36_UL_patch2",
                   "OPTIONS": {
                         "eventcontent": "RAWSIM",
-                        "outputCommand": "\"keep",
+                        "outputCommand": "\"keep *_mix_*_*,keep *_genPUProtons_*_*\"",
                         "datatier": "GEN-SIM-RAW",
-                        "inputCommands": "\"keep",
+                        "inputCommands": "\"keep *,drop *_*_BMTF_*,drop *PixelFEDChannel*_*_*_*\"",
                         "conditions": "80X_mcRun2_asymptotic_2016_TrancheIV_v6",
+                        "customise_commands": "\"process.source.bypassVersionCheck = cms.untracked.bool(True)\"",
                         "step": "HLT:25ns15e33_v4",
                         "geometry": "DB:Extended",
                         "era": "Run2_2016",
