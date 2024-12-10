@@ -137,7 +137,7 @@ class SubmitFactory:
                     cmsdriver_writes.append(f"--{opt_name} {opt_value}")
             if "pileup_input" in OPTIONS.keys():
                 if self.ARGS["das_premix"]:
-                    cmsdriver_writes.append(f"--pileup_input {opt_value}")
+                    cmsdriver_writes.append(f"--pileup_input {OPTIONS['pileup_input']}")
                 else:
                     cmsdriver_writes.append(f"--pileup_input filelist:pileup.txt")
                     os.system(f"cp {self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt {self.SUBMITDIR}/pileup.txt")
