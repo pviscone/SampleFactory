@@ -20,10 +20,13 @@ setup:
 
 variables:
   PREPIDS: |
-    Run3Summer22
-    Run3Summer22EE
-    Run3Summer23
-    Run3Summer23BPix
+    Run3Summer22wmLHEGS
+    Run3Summer22EEwmLHEGS
+    Run3Summer23wmLHEGS
+    Run3Summer23BPixwmLHEGS
+    RunIII2024Summer24wmLHEGS
+    RunIISummer20UL16GEN
+    RunIISummer20UL18wmLHEGEN
   CHAINS: |
     Run3Summer22wmLHEGS-Run3Summer22NanoAODv12
     Run3Summer22EEwmLHEGS-Run3Summer22EENanoAODv12
