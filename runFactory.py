@@ -141,6 +141,8 @@ class SubmitFactory:
                 else:
                     cmsdriver_writes.append(f"--pileup_input filelist:pileup.txt")
                     os.system(f"cp {self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt {self.SUBMITDIR}/pileup.txt")
+                # ignore log for premix step as it prints out all pileup_input
+                cmsdriver_write += f" &> /dev/null"
 
             os.system(f"touch {self.SUBMITDIR}/pileup.txt")  # FIXME stupid hacky line to make NanoGEN work without thinking
 
