@@ -119,6 +119,10 @@ If you want a new chain that does not exist in this repository or if you want to
 **NOT UPDATED YET** Function in place `getPileup.py` and working but just missing documentation for now.
 
 # Logs
+- 2024/12/10
+  - Better collection of premix library (getPileup.py is much slower but much less failure rates during the job runs)
+  - Automatic reprocessing of premix library failures
+
 - 2024/10/08
   - Deploying v1.0
   - NanoAOD fixed : Forcing flat nano instead of edm nano
