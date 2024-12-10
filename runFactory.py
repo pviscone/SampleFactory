@@ -150,6 +150,27 @@ class SubmitFactory:
 
             run_writes.append(cmsdriver_cmd)
             run_writes.append(f"time cmsRun {wf}.py")
+            if "pileup_input" in OPTIONS.keys():
+                run_writes.append(f"for ATTEMPT in {{1..10}}; do")
+                run_writes.append(f"    if [ -f \"{wf}.root\" ]; then")
+                run_writes.append(f"        if ! edmFileUtil -f \"{wf}.root\" &>/dev/null; then")
+                run_writes.append(f"            echo SAMPLEFACTORY::{wf}.root is corrupted")
+                run_writes.append(f"        else")
+                run_writes.append(f"            NEVENTS=$(edmFileUtil -f \"{wf}.root\" | grep -oP '\\(\\d+ runs, \\d+ lumis, \\K\\d+(?= events)')")
+                run_writes.append(f"            if [[ -z \"$NEVENTS\" ]]; then")
+                run_writes.append(f"                echo SAMPLEFACTORY::Could not parse number of events in {wf}.root")
+                run_writes.append(f"            elif (( NEVENTS == 0 )); then")
+                run_writes.append(f"                echo SAMPLEFACTORY::{wf}.root has 0 events, likely corrupted")
+                run_writes.append(f"            else")
+                run_writes.append(f"                echo SAMPLEFACTORY::Finished processing {wf}.root with trials $ATTEMPT")
+                run_writes.append(f"                break")
+                run_writes.append(f"            fi")
+                run_writes.append(f"        fi")
+                run_writes.append(f"    fi")
+                run_writes.append(f"    echo SAMPLEFACTORY::Could not find valid {wf}.root, resubmitting with trials $ATTEMPT")
+                run_writes.append(f"    time cmsRun {wf}.py")
+                run_writes.append(f"done")
+
             run_writes.append(f"####################################\n")
 
         run_writes.append(f"####################################")
