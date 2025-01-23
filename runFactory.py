@@ -216,7 +216,7 @@ class SubmitFactory:
         os.system(f"cp $(voms-proxy-info --path) {self.SUBMITDIR}/MyProxy")
         os.system(f"cp {self.FACTORY}/data/condor/" + self.ARGS["host"] + f"/condor.jds {self.SUBMITDIR}/")
         os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/condor.jds")
-        os.system(f"sed -i 's|@@RequestMemory@@|8000|g' {self.SUBMITDIR}/condor.jds")
+        os.system(f"sed -i 's|@@RequestMemory@@|16000|g' {self.SUBMITDIR}/condor.jds")
         # TODO generalize needed inputs for other use cases
         os.system(f"sed -i 's|@@transfer_input_files@@|{self.SUBMITDIR}/fragment.py,{self.SUBMITDIR}/pileup.txt|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/condor.jds")

@@ -1,0 +1,29 @@
+{
+      "STEPS": [
+            "Run3Summer23GEN"
+      ],
+      "KEEPS": [
+            "Run3Summer23GEN"
+      ],
+      "WORKFLOWS": {
+            "Run3Summer23GEN": {
+                  "SCRAM_ARCH": "el8_amd64_gcc11",
+                  "CMSSW_VERSION": "CMSSW_13_0_15",
+                  "OPTIONS": {
+                        "eventcontent": "RAWSIM",
+                        "datatier": "GEN",
+                        "conditions": "130X_mcRun3_2023_realistic_postBPix_v2",
+                        "beamspot": "Realistic25ns13p6TeVEarly2023Collision",
+                        "step": "GEN",
+                        "geometry": "DB:Extended",
+                        "era": "Run3_2023",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": []
+                  }
+            }
+      }
+}
