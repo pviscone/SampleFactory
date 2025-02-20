@@ -12,7 +12,7 @@
       "WORKFLOWS": {
             "RunIII2024Summer24wmLHEGS": {
                   "SCRAM_ARCH": "el8_amd64_gcc12",
-                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "CMSSW_VERSION": "CMSSW_14_0_19",
                   "OPTIONS": {
                         "eventcontent": "RAWSIM,LHE",
                         "datatier": "GEN-SIM,LHE",
@@ -31,7 +31,7 @@
             },
             "RunIII2024Summer24DRPremix": {
                   "SCRAM_ARCH": "el8_amd64_gcc12",
-                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "CMSSW_VERSION": "CMSSW_14_0_20",
                   "OPTIONS": {
                         "eventcontent": "PREMIXRAW",
                         "datatier": "GEN-SIM-RAW",
@@ -52,7 +52,7 @@
             },
             "RunIII2024Summer24DRPremixStep1": {
                   "SCRAM_ARCH": "el8_amd64_gcc12",
-                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "CMSSW_VERSION": "CMSSW_14_0_20",
                   "OPTIONS": {
                         "eventcontent": "AODSIM",
                         "datatier": "AODSIM",
@@ -70,7 +70,7 @@
             },
             "RunIII2024Summer24MiniAOD": {
                   "SCRAM_ARCH": "el8_amd64_gcc12",
-                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "CMSSW_VERSION": "CMSSW_14_0_19",
                   "OPTIONS": {
                         "eventcontent": "MINIAODSIM",
                         "datatier": "MINIAODSIM",
@@ -88,7 +88,7 @@
             },
             "RunIII2024Summer24NanoAOD": {
                   "SCRAM_ARCH": "el8_amd64_gcc12",
-                  "CMSSW_VERSION": "CMSSW_14_0_18",
+                  "CMSSW_VERSION": "CMSSW_14_0_19",
                   "OPTIONS": {
                         "eventcontent": "NANOAODSIM",
                         "datatier": "NANOAODSIM",
