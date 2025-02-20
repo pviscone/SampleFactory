@@ -2,21 +2,21 @@
     "SCRAM_ARCH": "el8_amd64_gcc12",
     "STEPS": {
         "RunIII2024Summer24wmLHEGS" : {
-            "prepid" : "GEN-RunIII2024Summer24wmLHEGS-00001",
+            "prepid" : "GEN-RunIII2024Summer24wmLHEGS-00295",
             "note" : ""
         },
         "RunIII2024Summer24DRPremix" : {
-            "prepid" : "GEN-RunIII2024Summer24DRPremix-00001",
+            "prepid" : "GEN-RunIII2024Summer24DRPremix-00124",
             "note" : ""
         },
         "RunIII2024Summer24MiniAOD" : {
-            "prepid" : "GEN-RunIII2024Summer24MiniAOD-00001",
+            "prepid" : "GEN-RunIII2024Summer24MiniAOD-00124",
             "note" : ""
         },
         "RunIII2024Summer24NanoAOD" : {
-            "prepid" : "GEN-RunIII2024Summer24NanoAOD-00001",
+            "prepid" : "GEN-RunIII2024Summer24NanoAOD-00143",
             "note" : ""
         }
     },
-    "note" : "TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8"
+    "note" : "Zto2Nu-2Jets_Bin-2J-PTNuNu-600_TuneCP5_13p6TeV_amcatnloFXFX-pythia8"
 }
