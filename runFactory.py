@@ -140,6 +140,8 @@ class SubmitFactory:
                     cmsdriver_writes.append(f"--pileup_input {OPTIONS['pileup_input']}")
                 else:
                     cmsdriver_writes.append(f"--pileup_input filelist:pileup.txt")
+                    if not os.path.exists(f"{self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt"):
+                        Logger.ERROR(f"could not find {self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt")
                     os.system(f"cp {self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt {self.SUBMITDIR}/pileup.txt")
                 # ignore log for premix step as it prints out all pileup_input
                 cmsdriver_writes.append("&> /dev/null")
