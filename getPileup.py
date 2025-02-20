@@ -59,6 +59,10 @@ class GetPileup:
             Logger.WARNING(f"checking {pileup_dataset} in {site}")
             #print (f"dasgoclient -query='file dataset={pileup_dataset} site={site}'")
             os.system(f"dasgoclient -query='file dataset={pileup_dataset} site={site}' >> data/pileups/{pileup_txt}")
+            with open(f"data/pileups/{pileup_txt}", "r") as rf:
+                if "failure" in rf.read():
+                    Logger.WARNING(f"skipping {site} due to {rf.read()}")
+                    continue
             os.system(f"sort data/pileups/{pileup_txt} > data/pileups/__{pileup_txt}")
             os.system(f"uniq data/pileups/__{pileup_txt} > data/pileups/{pileup_txt}")
             os.system(f"rm data/pileups/__{pileup_txt}")
