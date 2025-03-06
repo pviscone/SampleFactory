@@ -1,0 +1,11 @@
+{
+    "SCRAM_ARCH": "el8_amd64_gcc10",
+    "STEPS": {
+        "Run3Summer22GS" : {
+            "prepid" : "PPD-Run3Summer22GS-00002",
+            "note" : ""
+        }
+    },
+    "note" : "MinBias_TuneCP5_13p6TeV-pythia8"
+}
+

@@ -1,4 +1,4 @@
-+JobBatchName = @@JobBatchName@@
+JobBatchName = @@JobBatchName@@
 executable = @@SUBMITDIR@@/run.sh
 RequestMemory = @@RequestMemory@@
 when_to_transfer_output = on_exit
@@ -11,6 +11,7 @@ transfer_input_files = @@transfer_input_files@@
 use_x509userproxy = True
 +JobFlavour = "testmatch"
 x509userproxy = @@SUBMITDIR@@/MyProxy
-+SingularityImage = "/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-@@MyWantOS@@:latest" 
++SingularityImage = "/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-@@MyWantOS@@:latest"
++ProjectName = "cms.org"
 queue @@queue@@
 
