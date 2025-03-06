@@ -1,4 +1,4 @@
-JobBatchName = @@JobBatchName@@
++JobBatchName = @@JobBatchName@@
 executable = @@SUBMITDIR@@/run.sh
 RequestMemory = @@RequestMemory@@
 when_to_transfer_output = on_exit

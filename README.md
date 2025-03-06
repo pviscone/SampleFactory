@@ -66,7 +66,8 @@ You can simply trigger a dummy example to see how it works.
 -c data/chains/chain_Run3Summer22wmLHEGS-Run3Summer22NanoAODv12.json \
 -f data/fragments/DummyTest_TuneCP5_13p6TeV_madgraph-pythia8.py \
 -n 20 \
--j 10
+-j 10 \
+--das_premix \ # Please read below "Pileup Collector" to avoid using this
 ```
 
 This submits the `DummyTest` physics process with `Run3Summer22` conditions. If you don't want to care too much about details but rather "I want my physics process samples with `Run3Summer22` condition", just modify `-f` option to the python configuration file that contains your desired physics process and `-n` option and `-j` which ultimately defines your total number of events. In order to run a unit test locally instead of submitting the job through condor, add `--test`.
@@ -106,19 +107,30 @@ It has to be given with following arguments :
 
 ## Chain Collector
 
-`getChains.py` takes the list of PrepIds as an input defined in JSON format in `data/prepids`. It takes the McM validation script of the given PrepId, parse options for the cmsDriver.py command in a rough text based way, and prepares a JSON file which contains the full production chain information as in the files existing in `data/chains/` repository. You can test it via following command. This is to avoid human error (looking at McM, copying every single option one by one by hand, pasting it in your terminal) and semi-automatically do the work for you. Depending on the development of McM, this might not work as McM validation scripts can evolve throughout time.
+`getChains.py` takes the list of PrepIds as an input defined in JSON format in `data/prepids`. It takes the McM validation script of the given PrepId, parse options for the cmsDriver.py command in a rough text based way, and prepares a JSON file which contains the full production chain information as in the files existing in `data/chains/` repository. You can test it via following command. This is to avoid human error (looking at McM, copying every single option one by one by hand, pasting it in your terminal) and semi-automatically do the work for you. Depending on the development of McM, this might not work as McM validation scripts can evolve throughout time (and please let me know if that is the case!).
 
 ```
-./getChains.py data/prepids/Run3Summer22.json
+./getChains.py data/prepids/Run3Summer22wmLHEGS-Run3Summer22NanoAODv12.json
 ```
 
 If you want a new chain that does not exist in this repository or if you want to update the existing ones, you have to navigate through McM (on how to do this, please check [link](https://exo-mc-and-i.gitbook.io/exo-mc-and-interpretation/others/finding-prepids-in-mcm)), pick one sample that is already produced with your desired chain, copy paste the prepids into JSON format and execute `./getChains.py` as above. The output of the script will be given with name `chain_FIRSTPREPID-LASTPREPID.json`. If only one PrepId is given as an input, it will be `chain_FIRSTPREPID.json`. Put this output into `data/chains/` and check if it works!
 
 ## Pileup Collector
 
-**NOT UPDATED YET** Function in place `getPileup.py` and working but just missing documentation for now.
+Instead of querying the MinBias library for every single job separately (this is also error prone as some of the files get hidden into the tapes from time to time depending on the available storage for the whole CMS), precollect the list and pass the avaialble ones at site to be given as an input to the jobs. Note that this takes quite a long time as it queries multiple T2/T3 sites.
+
+```
+./getPileup.py -c data/chains/chain_Run3Summer22wmLHEGS-Run3Summer22NanoAODv12.json
+```
+
+If you do not want to do this, keep in mind that you should always give `--das_premix` when executing `runFactory.py`, otherwise it will be empty with MinBias. But as said above, this will take longer time for the jobs to finish so it's better to collect the list earlier and avoid using `--das_premix`.
 
 # Logs
+- 2025/02/20
+  - Add pileup collector instruction
+  - Remove the pileup txt files (too large to store)
+  - Allow batch choices properly for cmsconnect and lxplus
+
 - 2024/12/10
   - Better collection of premix library (getPileup.py is much slower but much less failure rates during the job runs)
   - Automatic reprocessing of premix library failures

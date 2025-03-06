@@ -29,7 +29,7 @@ def ArgParser(file_name):
     parser.add_argument("-j", "--njobs", required=required_njobs, type=str,
                         help="Number of jobs to submit"
                         )
-    parser.add_argument("--host", required=False, type=str, default="base",
+    parser.add_argument("--host", required=False, type=str, default="",
                         help="Name of the hosting server"
                         )
     parser.add_argument("--test", required=False, action="store_true", default=False)
@@ -38,5 +38,14 @@ def ArgParser(file_name):
     parser.add_argument("--das_premix", required=False, action="store_true", default=False)
 
     args = parser.parse_args()
+
+    if args.host == "":
+        this_host = os.getenv("HOSTNAME")
+        if "login.uscms.org" in this_host:
+            args.host = "cmsconnect"
+        elif "lxplus" in this_host:
+            args.host = "lxplus"
+        else:
+            args.host = "base"
     return args
 
