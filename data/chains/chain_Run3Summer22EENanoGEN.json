@@ -1,0 +1,28 @@
+{
+      "STEPS": [
+            "Run3Summer22EENanoGEN"
+      ],
+      "KEEPS": [
+            "Run3Summer22EENanoGEN"
+      ],
+      "WORKFLOWS": {
+            "Run3Summer22EENanoGEN": {
+                  "SCRAM_ARCH": "el8_amd64_gcc10",
+                  "CMSSW_VERSION": "CMSSW_12_4_19",
+                  "OPTIONS": {
+                        "eventcontent": "NANOAODSIM",
+                        "datatier": "NANOAODSIM",
+                        "conditions": "124X_mcRun3_2022_realistic_postEE_v1",
+                        "beamspot": "Realistic25ns13p6TeVEarly2022Collision",
+                        "step": "GEN,NANOGEN",
+                        "era": "Run3",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": []
+                  }
+            }
+      }
+}
