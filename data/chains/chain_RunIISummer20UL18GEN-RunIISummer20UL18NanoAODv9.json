@@ -9,6 +9,7 @@
             "RunIISummer20UL18NanoAODv9"
       ],
       "KEEPS": [
+            "RunIISummer20UL18MiniAODv2",
             "RunIISummer20UL18NanoAODv9"
       ],
       "WORKFLOWS": {
