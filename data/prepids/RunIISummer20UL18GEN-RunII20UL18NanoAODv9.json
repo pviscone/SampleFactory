@@ -1,0 +1,34 @@
+{
+    "SCRAM_ARCH": "slc7_amd64_gcc820",
+    "STEPS": {
+        "RunIISummer20UL18GEN" : {
+            "prepid" : "BPH-RunIISummer20UL18GEN-00066 ",
+            "note" : ""
+        },
+        "RunIISummer20UL18SIM" : {
+            "prepid" : "BPH-RunIISummer20UL18SIM-00135",
+            "note" : ""
+        },
+        "RunIISummer20UL18DIGIPremix" : {
+            "prepid" : "BPH-RunIISummer20UL18DIGIPremix-00135",
+            "note" : ""
+        },
+        "RunIISummer20UL18HLT" : {
+            "prepid" : "BPH-RunIISummer20UL18HLT-00135",
+            "note" : ""
+        },
+        "RunIISummer20UL18RECO" : {
+            "prepid" : "BPH-RunIISummer20UL18RECO-00135",
+            "note" : ""
+        },
+        "RunIISummer20UL18MiniAODv2" : {
+            "prepid" : "BPH-RunIISummer20UL18MiniAODv2-00130",
+            "note" : ""
+        },
+        "RunIISummer20UL18NanoAODv9" : {
+            "prepid" : "BPH-RunIISummer20UL18NanoAODv9-00129",
+            "note" : ""
+        }
+    },
+    "note" : "/BuToJpsiPi_SoftQCDnonD_TuneCP5_13TeV-pythia8-evtgen/RunIISummer20UL18NanoAODv9-106X_upgrade2018_realistic_v16_L1v1-v2/NANOAODSIM"
+}
