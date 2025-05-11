@@ -13,7 +13,6 @@ from scripts.argparser import ArgParser
 
 class SubmitFactory:
     def __init__(self):
-        self.nSteps=0
         self.WARNINGS = 0
         self.TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -80,18 +79,16 @@ class SubmitFactory:
 
         os.system(f"mkdir -p {self.SUBMITDIR}")
 
-
+        run_writes = []
+        run_writes.append(f"#!/usr/bin/env bash\n")
+        run_writes.append(f"cat /etc/os-release\n")
+        run_writes.append("echo 'JOBINDEX ===>' ${PROCID}\n")
+        run_writes.append(f"source /cvmfs/cms.cern.ch/cmsset_default.sh\n")
         # steps that requires fragments as inputs (root requests)
         req_frags = ["wmLHEGS", "wmLHE", "GS", "wmLHEGEN", "GEN"]
-        run_writes_total = ["#!/usr/bin/env bash\n"]
         for wf_idx, (wf, cfg) in enumerate(workflows.items()):
             cmsdriver_writes = []
-            run_writes = []
-            run_writes.append(f"#!/usr/bin/env bash\n")
-            run_writes.append(f"cat /etc/os-release\n")
-            run_writes.append("echo 'JOBINDEX ===>' ${PROCID}\n")
             run_writes.append(f"####################################")
-            run_writes.append(f"source /cvmfs/cms.cern.ch/cmsset_default.sh\n")
             run_writes.append(f"echo 'STEP {wf_idx} : {wf}'")
 
             CMSSW_VERSION = cfg["CMSSW_VERSION"]
@@ -99,13 +96,6 @@ class SubmitFactory:
             OPTIONS = cfg["OPTIONS"]
             CUSTOMIZES = cfg["CUSTOMIZES"]  # TODO
 
-            singularity = "cmssw-el"
-            if "7" in SCRAM_ARCH.split("_")[0]:
-                singularity +="7 -- "
-            elif "8" in SCRAM_ARCH.split("_")[0]:
-                singularity +="8 -- "
-            elif "9" in SCRAM_ARCH.split("_")[0]:
-                singularity +="9 -- "
             # append OS for unit test apptainers for now
             # TODO not sure what to do with this for now
             # do we have any campaigns that runs on different OS releases?
@@ -186,27 +176,22 @@ class SubmitFactory:
                 run_writes.append(f"done")
 
             run_writes.append(f"####################################\n")
-            with open(f"{self.SUBMITDIR}/run_step{wf_idx}.sh", "w") as wf:
-                for run_write in run_writes:
-                    wf.write(run_write + "\n")
-            os.system(f"chmod a+x {self.SUBMITDIR}/run_step{wf_idx}.sh")
-            run_writes_total.append(f"{singularity} ./run_step{wf_idx}.sh\n")
-            self.nSteps +=1
 
-        run_writes_total.append(f"####################################")
+        run_writes.append(f"####################################")
         os.system(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
         for keep in keeps:
             xrdcp_file = f"{keep}_" + "${PROCID}.root"
-            run_writes_total.append(f"echo '{keep}.root will be xrdcped as' {xrdcp_file}")
-            run_writes_total.append(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
-            run_writes_total.append(f"xrdcp {keep}.root {self.XROOTD_HOST}/{self.LFN_PATH}/SampleFactory/{self.JOBDIR}/{xrdcp_file}")
+            run_writes.append(f"echo '{keep}.root will be xrdcped as' {xrdcp_file}")
+            run_writes.append(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
+            run_writes.append(f"xrdcp {keep}.root {self.XROOTD_HOST}/{self.LFN_PATH}/SampleFactory/{self.JOBDIR}/{xrdcp_file}")
 
-        run_writes_total.append("rm *.root")
+        run_writes.append("rm *.root")
+
         with open(f"{self.SUBMITDIR}/run.sh", "w") as wf:
-            for run_write in run_writes_total:
+            for run_write in run_writes:
                 wf.write(run_write + "\n")
         os.system(f"chmod a+x {self.SUBMITDIR}/run.sh")
-        
+
         os.system(f"cp " + self.ARGS["fragment"] + f" {self.SUBMITDIR}/fragment.py")
 
     def __submit_JOBS(self):
@@ -235,8 +220,7 @@ class SubmitFactory:
         os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@RequestMemory@@|16000|g' {self.SUBMITDIR}/condor.jds")
         # TODO generalize needed inputs for other use cases
-        steps_files=",".join([f"{self.SUBMITDIR}/run_step{idx}.sh" for idx in range(self.nSteps)])
-        os.system(f"sed -i 's|@@transfer_input_files@@|{self.SUBMITDIR}/fragment.py,{self.SUBMITDIR}/pileup.txt,{steps_files}|g' {self.SUBMITDIR}/condor.jds")
+        os.system(f"sed -i 's|@@transfer_input_files@@|{self.SUBMITDIR}/fragment.py,{self.SUBMITDIR}/pileup.txt|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@MyWantOS@@|{os_version}|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@queue@@|" + self.ARGS["njobs"] + f"|g' {self.SUBMITDIR}/condor.jds")
@@ -244,7 +228,7 @@ class SubmitFactory:
         os.chdir(self.SUBMITDIR)
         if self.ARGS["test"]:
             Logger.INFO(f"Testing the submission script in {self.SUBMITDIR}")
-            os.system(f"$(echo {self.SUBMITDIR}/run.sh) > test.log.{self.TIMESTAMP}")
+            os.system(f"cmssw-{os_version} -- $(echo {self.SUBMITDIR}/run.sh) > test.log.{self.TIMESTAMP}")
             with open(f"test.log.{self.TIMESTAMP}") as rf:
                 if "Traceback" in rf.read():
                     Logger.ERROR(f"Traceback error found in the log file test.log.{self.TIMESTAMP}")
