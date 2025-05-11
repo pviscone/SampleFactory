@@ -9,8 +9,9 @@ environment = "PROCID=$(ProcId)"
 should_transfer_files = YES
 transfer_input_files = @@transfer_input_files@@
 use_x509userproxy = True
-+JobFlavour = "testmatch"
++JobFlavour = "nextweek"
 x509userproxy = @@SUBMITDIR@@/MyProxy
 +SingularityImage = "/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-@@MyWantOS@@:latest" 
++AccountingGroup = "group_u_CMST3.all"
 queue @@queue@@
 
