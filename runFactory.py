@@ -13,6 +13,7 @@ from scripts.argparser import ArgParser
 
 class SubmitFactory:
     def __init__(self):
+        self.nSteps=0
         self.WARNINGS = 0
         self.TIMESTAMP = datetime.now().strftime("%Y%m%d_%H%M%S")
 
@@ -190,6 +191,7 @@ class SubmitFactory:
                     wf.write(run_write + "\n")
             os.system(f"chmod a+x {self.SUBMITDIR}/run_step{wf_idx}.sh")
             run_writes_total.append(f"{singularity} ./run_step{wf_idx}.sh\n")
+            self.nSteps +=1
 
         run_writes_total.append(f"####################################")
         os.system(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
@@ -233,7 +235,8 @@ class SubmitFactory:
         os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@RequestMemory@@|16000|g' {self.SUBMITDIR}/condor.jds")
         # TODO generalize needed inputs for other use cases
-        os.system(f"sed -i 's|@@transfer_input_files@@|{self.SUBMITDIR}/fragment.py,{self.SUBMITDIR}/pileup.txt|g' {self.SUBMITDIR}/condor.jds")
+        steps_files=",".join([f"{self.SUBMITDIR}/run_step{idx}.sh" for idx in range(self.nSteps)])
+        os.system(f"sed -i 's|@@transfer_input_files@@|{self.SUBMITDIR}/fragment.py,{self.SUBMITDIR}/pileup.txt,{steps_files}|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@MyWantOS@@|{os_version}|g' {self.SUBMITDIR}/condor.jds")
         os.system(f"sed -i 's|@@queue@@|" + self.ARGS["njobs"] + f"|g' {self.SUBMITDIR}/condor.jds")
