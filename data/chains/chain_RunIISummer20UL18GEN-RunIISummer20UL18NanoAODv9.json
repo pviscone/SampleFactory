@@ -22,6 +22,7 @@
                         "conditions": "106X_upgrade2018_realistic_v4",
                         "beamspot": "Realistic25ns13TeVEarly2018Collision",
                         "step": "GEN",
+                        "number_out": 100,
                         "geometry": "DB:Extended",
                         "era": "Run2_2018",
                         "mc": null
