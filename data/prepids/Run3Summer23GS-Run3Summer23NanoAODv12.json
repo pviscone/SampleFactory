@@ -1,0 +1,23 @@
+{
+    "SCRAM_ARCH": "el8_amd64_gcc10",
+    "STEPS": {
+        "Run3Summer23GS" : {
+            "prepid" : "BPH-Run3Summer23GS-00042",
+            "note" : ""
+        },
+        "Run3Summer23DRPremix" : {
+                    "prepid" : "BPH-Run3Summer23DRPremix-00030",
+                    "note" : ""
+        },
+        "Run3Summer23MiniAODv4" : {
+                    "prepid" : "BPH-Run3Summer23MiniAODv4-00030",
+                    "note" : ""
+        },
+        "Run3Summer23NanoAODv12" : {
+                    "prepid" : "BPH-Run3Summer23NanoAODv12-00030",
+                    "note" : ""
+        }
+    },
+    "note" : "BPH-chain_Run3Summer23GS_flowRun3Summer23DRPremix_flowRun3Summer23MiniAODv4_flowRun3Summer23NanoAODv12-00030"
+}
+
