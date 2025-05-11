@@ -41,8 +41,8 @@ class SubmitFactory:
             Logger.ERROR(self.ARGS["chain"] + " does not exist")
         if not os.path.exists(self.ARGS["fragment"]):
             Logger.ERROR(self.ARGS["fragment"] + " does not exist")
-        if int(self.ARGS["nevents"]) > 2500:
-            Logger.WARNING(self.ARGS["nevents"] + " larger than 2500, jobs might take too long to finish before condor walltime")
+        if int(self.ARGS["nevents"]) > 5000:
+            Logger.WARNING(self.ARGS["nevents"] + " larger than 5000, jobs might take too long to finish before condor walltime")
         if os.getenv("ProcId"):
             self.PROCID = os.getenv("ProcId")
         else:
@@ -244,7 +244,7 @@ class SubmitFactory:
         os.chdir(self.SUBMITDIR)
         if self.ARGS["test"]:
             Logger.INFO(f"Testing the submission script in {self.SUBMITDIR}")
-            os.system(f"cmssw-{os_version} -- $(echo {self.SUBMITDIR}/run.sh) > test.log.{self.TIMESTAMP}")
+            os.system(f"$(echo {self.SUBMITDIR}/run.sh) > test.log.{self.TIMESTAMP}")
             with open(f"test.log.{self.TIMESTAMP}") as rf:
                 if "Traceback" in rf.read():
                     Logger.ERROR(f"Traceback error found in the log file test.log.{self.TIMESTAMP}")
