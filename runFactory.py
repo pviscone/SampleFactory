@@ -79,16 +79,18 @@ class SubmitFactory:
 
         os.system(f"mkdir -p {self.SUBMITDIR}")
 
-        run_writes = []
-        run_writes.append(f"#!/usr/bin/env bash\n")
-        run_writes.append(f"cat /etc/os-release\n")
-        run_writes.append("echo 'JOBINDEX ===>' ${PROCID}\n")
-        run_writes.append(f"source /cvmfs/cms.cern.ch/cmsset_default.sh\n")
+
         # steps that requires fragments as inputs (root requests)
         req_frags = ["wmLHEGS", "wmLHE", "GS", "wmLHEGEN", "GEN"]
+        run_writes_total = ["#!/usr/bin/env bash\n"]
         for wf_idx, (wf, cfg) in enumerate(workflows.items()):
             cmsdriver_writes = []
+            run_writes = []
+            run_writes.append(f"#!/usr/bin/env bash\n")
+            run_writes.append(f"cat /etc/os-release\n")
+            run_writes.append("echo 'JOBINDEX ===>' ${PROCID}\n")
             run_writes.append(f"####################################")
+            run_writes.append(f"source /cvmfs/cms.cern.ch/cmsset_default.sh\n")
             run_writes.append(f"echo 'STEP {wf_idx} : {wf}'")
 
             CMSSW_VERSION = cfg["CMSSW_VERSION"]
@@ -96,6 +98,13 @@ class SubmitFactory:
             OPTIONS = cfg["OPTIONS"]
             CUSTOMIZES = cfg["CUSTOMIZES"]  # TODO
 
+            singularity = "cmssw-el"
+            if "7" in SCRAM_ARCH.split("_")[0]:
+                singularity +="7 -- "
+            elif "8" in SCRAM_ARCH.split("_")[0]:
+                singularity +="8 -- "
+            elif "9" in SCRAM_ARCH.split("_")[0]:
+                singularity +="9 -- "
             # append OS for unit test apptainers for now
             # TODO not sure what to do with this for now
             # do we have any campaigns that runs on different OS releases?
@@ -176,22 +185,26 @@ class SubmitFactory:
                 run_writes.append(f"done")
 
             run_writes.append(f"####################################\n")
+            with open(f"{self.SUBMITDIR}/run_step{wf_idx}.sh", "w") as wf:
+                for run_write in run_writes:
+                    wf.write(run_write + "\n")
+            os.system(f"chmod a+x {self.SUBMITDIR}/run_step{wf_idx}.sh")
+            run_writes_total.append(f"{singularity} ./run_step{wf_idx}.sh\n")
 
-        run_writes.append(f"####################################")
+        run_writes_total.append(f"####################################")
         os.system(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
         for keep in keeps:
             xrdcp_file = f"{keep}_" + "${PROCID}.root"
-            run_writes.append(f"echo '{keep}.root will be xrdcped as' {xrdcp_file}")
-            run_writes.append(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
-            run_writes.append(f"xrdcp {keep}.root {self.XROOTD_HOST}/{self.LFN_PATH}/SampleFactory/{self.JOBDIR}/{xrdcp_file}")
+            run_writes_total.append(f"echo '{keep}.root will be xrdcped as' {xrdcp_file}")
+            run_writes_total.append(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
+            run_writes_total.append(f"xrdcp {keep}.root {self.XROOTD_HOST}/{self.LFN_PATH}/SampleFactory/{self.JOBDIR}/{xrdcp_file}")
 
-        run_writes.append("rm *.root")
-
+        run_writes_total.append("rm *.root")
         with open(f"{self.SUBMITDIR}/run.sh", "w") as wf:
-            for run_write in run_writes:
+            for run_write in run_writes_total:
                 wf.write(run_write + "\n")
         os.system(f"chmod a+x {self.SUBMITDIR}/run.sh")
-
+        
         os.system(f"cp " + self.ARGS["fragment"] + f" {self.SUBMITDIR}/fragment.py")
 
     def __submit_JOBS(self):
