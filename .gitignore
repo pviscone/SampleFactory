@@ -1,7 +1,6 @@
 *MyProxy
 jobs
 configs/user_*.json
-!user_simpson.json
-!user_shjeon.json
+!user_pviscone.json
 *.pyc
 tmp
