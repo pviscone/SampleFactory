@@ -21,7 +21,7 @@
                         "beamspot": "Realistic25ns13p6TeVEarly2023Collision",
                         "step": "GEN,SIM",
                         "geometry": "DB:Extended",
-                        "number_out": 100,
+                        "number_out": 2000,
                         "era": "Run3_2023",
                         "mc": null
                   },
