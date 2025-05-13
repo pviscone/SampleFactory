@@ -105,6 +105,7 @@ class SubmitFactory:
             run_writes.append(f"cmsrel {CMSSW_VERSION}")
             run_writes.append(f"cd {CMSSW_VERSION}/src")
             run_writes.append(f"cmsenv")
+            run_writes.extend(CUSTOMIZES.get("cmssw", []))
             run_writes.append(f"cd ../..\n")
 
             give_fragment = any(req_frag in wf for req_frag in req_frags)
