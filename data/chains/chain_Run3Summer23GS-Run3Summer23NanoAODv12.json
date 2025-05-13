@@ -28,7 +28,8 @@
                         "files": [],
                         "pre-cmsRun": [],
                         "post-cmsRun": [],
-                        "cmssw": ["git cms-addpkg IOMC/ParticleGuns",
+                        "cmssw": ["git cms-init",
+                                  "git cms-addpkg IOMC/ParticleGuns",
                                   "git remote add pviscone https://github.com/pviscone/cmssw.git",
                                   "git fetch pviscone",
                                   "git checkout pviscone/FlatLxyParticleGun"]
