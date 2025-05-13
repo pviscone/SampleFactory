@@ -22,7 +22,8 @@ class CmsDriverCollector:
             customizes = {
                 "files" : [],
                 "pre-cmsRun" : [],
-                "post-cmsRun" :[]
+                "post-cmsRun" :[],
+                "cmssw": [],
             }
             self.workflows[key] = {
                 "SCRAM_ARCH" : self.scram_arch,
