@@ -10,7 +10,7 @@ generator = cms.EDProducer("FlatRandomPtAndLxyGunProducer",
         MinPhi = cms.double(-3.14159265359),
         MaxPhi = cms.double(3.14159265359),
         LxyMin = cms.double(0.),
-        LxyMax = cms.double(20.0),
+        LxyMax = cms.double(5.0),
         LzMax = cms.double(100.0),
     ),
     Verbosity = cms.untracked.int32(0), ## set to 1 (or greater)  for printouts
