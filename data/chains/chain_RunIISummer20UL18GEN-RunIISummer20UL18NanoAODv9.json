@@ -31,12 +31,17 @@
                         "pre-cmsRun": [],
                         "post-cmsRun": [],
                         "cmssw":[
+                              "git config --global user.name 'Piero Viscone'",
+                              "git config --global user.email 'pieroviscone@gmail.com'",
+                              "git config --global user.github pviscone",
+                              "git cms-init",
                               "git cms-addpkg IOMC/ParticleGuns",
-                              "git remote add pviscone https://github.com/pviscone/cmssw.git",
-                              "git fetch pviscone",
-                              "git checkout pviscone/FlatLxyParticleGun"                              
+                              "wget -P IOMC/ParticleGuns/interface/ https://raw.githubusercontent.com/pviscone/cmssw/refs/heads/FlatLxyParticleGun/IOMC/ParticleGuns/interface/FlatRandomPtAndLxyGunProducer.h",
+                              "wget -P IOMC/ParticleGuns/src/ https://raw.githubusercontent.com/pviscone/cmssw/refs/heads/FlatLxyParticleGun/IOMC/ParticleGuns/src/FlatRandomPtAndLxyGunProducer.cc",
+                              "echo '#include \"IOMC/ParticleGuns/interface/FlatRandomPtAndLxyGunProducer.h\"' >> IOMC/ParticleGuns/src/SealModule.cc",
+                              "echo 'using edm::FlatRandomPtAndLxyGunProducer;' >> IOMC/ParticleGuns/src/SealModule.cc",
+                              "echo 'DEFINE_FWK_MODULE(FlatRandomPtAndLxyGunProducer);' >> IOMC/ParticleGuns/src/SealModule.cc"
                         ]
-                        
                   }
             },
             "RunIISummer20UL18SIM": {
