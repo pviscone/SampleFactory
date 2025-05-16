@@ -1,11 +1,11 @@
 {
       "STEPS": [
             "Phase2Spring24GS",
-            "Run3Summer23MiniAODv4",
-            "Run3Summer23MiniAODv4Step1"
+            "Phase2Spring24DIGIRECOMiniAOD",
+            "Phase2Spring24DIGIRECOMiniAODStep1"
       ],
       "KEEPS": [
-            "Run3Summer23MiniAODv4Step1"
+            "Phase2Spring24DIGIRECOMiniAODStep1"
       ],
       "WORKFLOWS": {
             "Phase2Spring24GS": {
@@ -28,7 +28,7 @@
                         "cmssw": []
                   }
             },
-            "Run3Summer23MiniAODv4": {
+            "Phase2Spring24DIGIRECOMiniAOD": {
                   "SCRAM_ARCH": "el8_amd64_gcc12",
                   "CMSSW_VERSION": "CMSSW_14_0_6",
                   "OPTIONS": {
@@ -49,7 +49,7 @@
                         "cmssw": []
                   }
             },
-            "Run3Summer23MiniAODv4Step1": {
+            "Phase2Spring24DIGIRECOMiniAODStep1": {
                   "SCRAM_ARCH": "el8_amd64_gcc12",
                   "CMSSW_VERSION": "CMSSW_14_0_6",
                   "OPTIONS": {
