@@ -1,0 +1,76 @@
+{
+      "STEPS": [
+            "Phase2Spring24GS",
+            "Run3Summer23MiniAODv4",
+            "Run3Summer23MiniAODv4Step1"
+      ],
+      "KEEPS": [
+            "Run3Summer23MiniAODv4Step1"
+      ],
+      "WORKFLOWS": {
+            "Phase2Spring24GS": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_6",
+                  "OPTIONS": {
+                        "eventcontent": "FEVTDEBUG",
+                        "datatier": "GEN-SIM",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "beamspot": "HLLHC14TeV",
+                        "step": "GEN,SIM",
+                        "geometry": "Extended2026D110",
+                        "era": "Phase2C17I13M9",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": []
+                  }
+            },
+            "Run3Summer23MiniAODv4": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_6",
+                  "OPTIONS": {
+                        "eventcontent": "FEVTDEBUGHLT",
+                        "customise": "SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000,SimGeneral/MixingModule/customiseStoredTPConfig.higherPtTP,Configuration/DataProcessing/Utils.addMonitoring",
+                        "datatier": "GEN-SIM-DIGI-RAW",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "step": "DIGI:pdigi_valid,L1TrackTrigger,L1,DIGI2RAW,HLT:@relval2026",
+                        "geometry": "Extended2026D110",
+                        "nStreams": "2",
+                        "era": "Phase2C17I13M9",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": []
+                  }
+            },
+            "Run3Summer23MiniAODv4Step1": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_6",
+                  "OPTIONS": {
+                        "eventcontent": "MINIAODSIM",
+                        "customise": "SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000,Configuration/DataProcessing/Utils.addMonitoring",
+                        "datatier": "GEN-SIM-DIGI-RAW-MINIAOD",
+                        "inputCommands": "\"keep *\"",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "customise_commands": "\"process.MINIAODSIMoutput.outputCommands.append('keep *_*_*_HLT'); process.MINIAODSIMoutput.outputCommands.append('keep *_*_*_SIM');\"",
+                        "step": "RAW2DIGI,RECO,RECOSIM,PAT",
+                        "geometry": "Extended2026D110",
+                        "nStreams": "2",
+                        "era": "Phase2C17I13M9",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "files": [],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": []
+                  }
+            }
+      }
+}

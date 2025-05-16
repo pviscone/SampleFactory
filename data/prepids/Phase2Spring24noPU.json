@@ -1,0 +1,15 @@
+{
+    "SCRAM_ARCH": "el8_amd64_gcc12",
+    "STEPS": {
+        "Phase2Spring24GS" : {
+            "prepid" : "PPD-Phase2Spring24GS-00004",
+            "note" : ""
+        },
+        "Run3Summer23MiniAODv4" : {
+            "prepid" : "PPD-Phase2Spring24DIGIRECOMiniAOD-00017",
+            "note" : ""
+        }
+    },
+    "note" : "PPD-chain_Phase2Spring24GS_flowPhase2Spring24MiniAODnoPU-00001"
+}
+
