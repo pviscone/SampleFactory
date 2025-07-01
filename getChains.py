@@ -20,7 +20,6 @@ class CmsDriverCollector:
                 key = f"{step}Step{index}"
                 index += 1
             customizes = {
-                "files" : [],
                 "pre-cmsRun" : [],
                 "post-cmsRun" :[],
                 "cmssw": [],
@@ -107,6 +106,7 @@ def CreateJson(workflows):
     chain_name = steps[0]
     chain_name += f"-{steps[-1]}" if len(steps) > 1 else ""
     output = {
+        "FILES" : []
         "STEPS" : steps,
         "KEEPS" : [steps[-1]],
         "WORKFLOWS" : workflows
