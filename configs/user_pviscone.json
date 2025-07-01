@@ -1,4 +1,4 @@
 {
-    "XROOTD_HOST" : "root://eosuser.cern.ch/",
-    "LFN_PATH" : "/eos/user/p/pviscone"
+    "XROOTD_HOST" : "root://eoscms.cern.ch/",
+    "LFN_PATH" : "/eos/cms/store/cmst3/group/l1tr/pviscone"
 }
