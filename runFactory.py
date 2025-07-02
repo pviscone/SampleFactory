@@ -200,9 +200,9 @@ class SubmitFactory:
             run_writes.append(f"####################################\n")
 
         run_writes.append(f"####################################")
-        os.system(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
-
+        
         if not self.ARGS["crab"]:
+            os.system(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
             for keep in keeps:
                 xrdcp_file = f"{keep}_" + "${PROCID}.root"
                 run_writes.append(f"echo '{keep}.root will be xrdcped as' {xrdcp_file}")
