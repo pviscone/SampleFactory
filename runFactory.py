@@ -63,11 +63,13 @@ class SubmitFactory:
         steps = chain_json["STEPS"]
         workflows = chain_json["WORKFLOWS"]
         keeps = chain_json["KEEPS"]
+        self.keeps = keeps
         self.files = chain_json.get("FILES",[])
 
         user_json = self.__read_JSON(f"configs/user_{self.MY_NAME}.json")
         self.XROOTD_HOST = user_json["XROOTD_HOST"]
         self.LFN_PATH = user_json["LFN_PATH"]
+        self.CRAB_PATH = user_json["CRAB_PATH"]
 
         self.__validate_JOBS(steps=steps, workflows=workflows, keeps=keeps)
         if self.ARGS["fragment"]:
@@ -195,12 +197,14 @@ class SubmitFactory:
 
         run_writes.append(f"####################################")
         os.system(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
-        for keep in keeps:
-            xrdcp_file = f"{keep}_" + "${PROCID}.root"
-            run_writes.append(f"echo '{keep}.root will be xrdcped as' {xrdcp_file}")
-            run_writes.append(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
-            run_writes.append(f"xrdcp {keep}.root {self.XROOTD_HOST}/{self.LFN_PATH}/SampleFactory/{self.JOBDIR}/{xrdcp_file}")
-        run_writes.append("rm *.root")
+
+        if not self.ARGS["crab"]:
+            for keep in keeps:
+                xrdcp_file = f"{keep}_" + "${PROCID}.root"
+                run_writes.append(f"echo '{keep}.root will be xrdcped as' {xrdcp_file}")
+                run_writes.append(f"xrdfs {self.XROOTD_HOST} mkdir -p {self.LFN_PATH}/SampleFactory/{self.JOBDIR}")
+                run_writes.append(f"xrdcp {keep}.root {self.XROOTD_HOST}/{self.LFN_PATH}/SampleFactory/{self.JOBDIR}/{xrdcp_file}")
+            run_writes.append("rm *.root")
 
         with open(f"{self.SUBMITDIR}/run.sh", "w") as wf:
             for run_write in run_writes:
@@ -232,32 +236,60 @@ class SubmitFactory:
         Logger.INFO("################################")
 
         os.system(f"cp $(voms-proxy-info --path) {self.SUBMITDIR}/MyProxy")
-        os.system(f"cp {self.FACTORY}/data/condor/" + self.ARGS["host"] + f"/condor.jds {self.SUBMITDIR}/")
-        os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/condor.jds")
-        os.system(f"sed -i 's|@@RequestMemory@@|" + self.ARGS["memory"] + f"|g' {self.SUBMITDIR}/condor.jds")
-        # TODO generalize needed inputs for other use cases
         files = [f"{self.SUBMITDIR}/{f}" for f in self.files]
         files.append(f"{self.SUBMITDIR}/pileup.txt")
         if self.ARGS["fragment"]:
             files.append(f"{self.SUBMITDIR}/fragment.py")
-        files = ",".join(files)
-        os.system(f"sed -i 's|@@transfer_input_files@@|{files}|g' {self.SUBMITDIR}/condor.jds")
-        os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/condor.jds")
-        os.system(f"sed -i 's|@@MyWantOS@@|{os_version}|g' {self.SUBMITDIR}/condor.jds")
-        os.system(f"sed -i 's|@@queue@@|" + self.ARGS["njobs"] + f"|g' {self.SUBMITDIR}/condor.jds")
-        os.system(f"sed -i 's|@@flavor@@|" + self.ARGS["flavor"] + f"|g' {self.SUBMITDIR}/condor.jds")
+        if not self.ARGS["crab"]:
+            os.system(f"cp {self.FACTORY}/data/condor/" + self.ARGS["host"] + f"/condor.jds {self.SUBMITDIR}/")
+            os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/condor.jds")
+            os.system(f"sed -i 's|@@RequestMemory@@|" + self.ARGS["memory"] + f"|g' {self.SUBMITDIR}/condor.jds")
+            # TODO generalize needed inputs for other use cases
+            files = ",".join(files)
+            os.system(f"sed -i 's|@@transfer_input_files@@|{files}|g' {self.SUBMITDIR}/condor.jds")
+            os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/condor.jds")
+            os.system(f"sed -i 's|@@MyWantOS@@|{os_version}|g' {self.SUBMITDIR}/condor.jds")
+            os.system(f"sed -i 's|@@queue@@|" + self.ARGS["njobs"] + f"|g' {self.SUBMITDIR}/condor.jds")
+            os.system(f"sed -i 's|@@flavor@@|" + self.ARGS["flavor"] + f"|g' {self.SUBMITDIR}/condor.jds")
 
-        os.chdir(self.SUBMITDIR)
-        if self.ARGS["test"]:
-            Logger.INFO(f"Testing the submission script in {self.SUBMITDIR}")
-            os.system(f"cmssw-{os_version} -- $(echo {self.SUBMITDIR}/run.sh) > test.log.{self.TIMESTAMP}")
-            with open(f"test.log.{self.TIMESTAMP}") as rf:
-                if "Traceback" in rf.read():
-                    Logger.ERROR(f"Traceback error found in the log file test.log.{self.TIMESTAMP}")
+            os.chdir(self.SUBMITDIR)
+            if self.ARGS["test"]:
+                Logger.INFO(f"Testing the submission script in {self.SUBMITDIR}")
+                os.system(f"cmssw-{os_version} -- $(echo {self.SUBMITDIR}/run.sh) > test.log.{self.TIMESTAMP}")
+                with open(f"test.log.{self.TIMESTAMP}") as rf:
+                    if "Traceback" in rf.read():
+                        Logger.ERROR(f"Traceback error found in the log file test.log.{self.TIMESTAMP}")
+            else:
+                os.system(f"condor_submit {self.SUBMITDIR}/condor.jds")
+            os.chdir(self.FACTORY)
         else:
-            os.system(f"condor_submit {self.SUBMITDIR}/condor.jds")
-        os.chdir(self.FACTORY)
+            os.system(f"cp {self.FACTORY}/data/crab/crab.py {self.SUBMITDIR}/")
+            os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/crab.py")
+            os.system(f"sed -i 's|@@RequestMemory@@|" + self.ARGS["memory"] + f"|g' {self.SUBMITDIR}/crab.py")
+            files = '"' +  '","'.join(files) +'"'
+            os.system(f"sed -i 's|@@transfer_input_files@@|{files}|g' {self.SUBMITDIR}/crab.py")
+            os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/crab.py")
+            os.system(f"sed -i 's|@@njobs@@|" + self.ARGS["njobs"] + f"|g' {self.SUBMITDIR}/crab.py")
+            os.system(f"sed -i 's|@@nevents@@|" + self.ARGS["nevents"] + f"|g' {self.SUBMITDIR}/crab.py")
+            os.system(f"sed -i 's|@@OUTDIR@@|{self.CRAB_PATH}/SampleFactory|g' {self.SUBMITDIR}/crab.py")
 
+            outfiles = '"' + '","'.join([f'{k}.root' for k in self.keeps]) + '"'
+            os.system(f"sed -i 's|@@output_files@@|{outfiles}|g' {self.SUBMITDIR}/crab.py")
 
+            #run.sh
+            os.system(f"sed -i 's|cmsrel|scramv1 project|g' {self.SUBMITDIR}/run.sh")
+            os.system(f"sed -i 's|cmsenv|eval `scramv1 runtime -sh`|g' {self.SUBMITDIR}/run.sh")
+            os.system(f"sed -i 's|cmsRun|cmsRun -j FrameworkJobReport.xml -- |g' {self.SUBMITDIR}/run.sh")
+
+            os.system(f"cp {self.FACTORY}/data/crab/PSet.py {self.SUBMITDIR}/")
+
+            #crab_submit
+            os.system(f"cp {self.FACTORY}/data/crab/crab_submit.sh {self.SUBMITDIR}/")
+            if self.ARGS["test"]:
+                Logger.INFO(f"Testing the submission script in {self.SUBMITDIR} (dryrun)")
+                os.system(f"sed -i 's|crab submit -c crab.py|crab submit -c crab.py --dryrun|g' {self.SUBMITDIR}/crab_submit.sh")
+            os.system(f"cd {self.SUBMITDIR}; ./crab_submit.sh")
+                
 if __name__ == "__main__":
     SubmitFactory()
+
