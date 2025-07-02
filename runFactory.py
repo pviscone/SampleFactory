@@ -94,6 +94,10 @@ class SubmitFactory:
         run_writes = []
         run_writes.append(f"#!/usr/bin/env bash\n")
         run_writes.append(f"cat /etc/os-release\n")
+        if self.ARGS["crab"]:
+            run_writes.append(f'git config --global user.name \'{user_json["git_name"]}\'')
+            run_writes.append(f'git config --global user.email \'{user_json["git_mail"]}\'')
+            run_writes.append(f'git config --global user.github {user_json["git_username"]}')
         run_writes.append("echo 'JOBINDEX ===>' ${PROCID}\n")
         run_writes.append(f"source /cvmfs/cms.cern.ch/cmsset_default.sh\n")
         # steps that requires fragments as inputs (root requests)
@@ -273,7 +277,7 @@ class SubmitFactory:
             os.system(f"sed -i 's|@@nevents@@|" + self.ARGS["nevents"] + f"|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@OUTDIR@@|{self.CRAB_PATH}/SampleFactory|g' {self.SUBMITDIR}/crab.py")
 
-            outfiles = '"' + '","'.join([f'{k}.root' for k in self.keeps]) + '"'
+            outfiles = '"' + '","'.join([f'{k}.root' for k in self.keeps[:-1]]) + '"'
             os.system(f"sed -i 's|@@output_files@@|{outfiles}|g' {self.SUBMITDIR}/crab.py")
 
             #run.sh
@@ -282,6 +286,7 @@ class SubmitFactory:
             os.system(f"sed -i 's|cmsRun|cmsRun -j FrameworkJobReport.xml -- |g' {self.SUBMITDIR}/run.sh")
 
             os.system(f"cp {self.FACTORY}/data/crab/PSet.py {self.SUBMITDIR}/")
+            os.system(f"sed -i 's|@@output@@|{self.keeps[-1]}|g' {self.SUBMITDIR}/PSet.py")
 
             #crab_submit
             os.system(f"cp {self.FACTORY}/data/crab/crab_submit.sh {self.SUBMITDIR}/")
