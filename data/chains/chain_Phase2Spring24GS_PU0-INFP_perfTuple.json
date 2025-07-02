@@ -83,7 +83,7 @@
                   "CUSTOMIZES": {
                         "cmssw": [                              
                               "git cms-checkout-topic -u p2l1pfp:L1PF_14_2_X",
-                              "git clone git@github.com:p2l1pfp/FastPUPPI.git -b 14_2_X",
+                              "git clone https://github.com/p2l1pfp/FastPUPPI.git -b 14_2_X",
                               "sed -i \"s|/store/mc/Phase2Spring24DIGIRECOMiniAOD/TTToSemileptonic_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/2820000/5b6178a7-19bf-4f7f-af63-5bab03393e54|file:${CMSSW_BASE}/../Phase2Spring24DIGIRECOMiniAODStep1|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py",
                               "sed -i \"s|process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20))|process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py",
                               "scram b -j8"
@@ -100,7 +100,7 @@
                   "CUSTOMIZES": {
                         "cmssw": [                              
                               "git cms-checkout-topic -u pviscone:newCaloCalibs",
-                              "git clone git@github.com:pviscone/FastPUPPI.git -b perfTuple_update",
+                              "git clone https://github.com/pviscone/FastPUPPI.git -b perfTuple_update",
                               "sed -i \"s|inputs125X|${CMSSW_BASE}/../inputs140X|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
                               "echo 'goGun()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
                               "scram b -j8"

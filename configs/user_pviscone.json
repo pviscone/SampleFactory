@@ -1,5 +1,8 @@
 {
     "XROOTD_HOST" : "root://eoscms.cern.ch/",
     "LFN_PATH" : "/eos/cms/store/cmst3/group/l1tr/pviscone",
-    "CRAB_PATH": "/store/group/cmst3/group/l1tr/pviscone"
+    "CRAB_PATH": "/store/group/cmst3/group/l1tr/pviscone",
+    "git_username": "pviscone",
+    "git_name": "Piero Viscone",
+    "git_mail": "piero.viscone@cern.ch"
 }
