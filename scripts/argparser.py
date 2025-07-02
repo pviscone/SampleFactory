@@ -33,6 +33,7 @@ def ArgParser(file_name):
                         help="Name of the hosting server"
                         )
     parser.add_argument("--test", required=False, action="store_true", default=False)
+    parser.add_argument("--crab", required=False, action="store_true", default=False)
     parser.add_argument("--condor_log", required=False, action="store_true", default=False)
     parser.add_argument("--force", required=False, action="store_true", default=False) # FIXME forgot the use case for now
     parser.add_argument("--das_premix", required=False, action="store_true", default=False)
