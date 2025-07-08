@@ -1,0 +1,15 @@
+{
+    "SCRAM_ARCH": "el8_amd64_gcc12",
+    "STEPS": {
+        "Phase2Spring24LHEGS" : {
+            "prepid" : "TSG-Phase2Spring24wmLHEGS-00013",
+            "note" : ""
+        },
+        "Phase2Spring24DIGIRECOMiniAOD" : {
+            "prepid" : "TSG-Phase2Spring24DIGIRECOMiniAOD-00076",
+            "note" : ""
+        }
+    },
+    "note" : ""
+}
+
