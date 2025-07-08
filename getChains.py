@@ -106,7 +106,7 @@ def CreateJson(workflows):
     chain_name = steps[0]
     chain_name += f"-{steps[-1]}" if len(steps) > 1 else ""
     output = {
-        "FILES" : []
+        "FILES" : [],
         "STEPS" : steps,
         "KEEPS" : [steps[-1]],
         "WORKFLOWS" : workflows
