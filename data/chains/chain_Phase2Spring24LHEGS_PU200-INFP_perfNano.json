@@ -3,10 +3,13 @@
       "STEPS": [
             "Phase2Spring24LHEGS",
             "Phase2Spring24DIGIRECOMiniAOD",
-            "Phase2Spring24DIGIRECOMiniAODStep1"
+            "Phase2Spring24DIGIRECOMiniAODStep1",
+            "inputs140X",
+            "perfNano"
       ],
       "KEEPS": [
-            "Phase2Spring24DIGIRECOMiniAODStep1"
+            "inputs140X",
+            "perfNano"
       ],
       "WORKFLOWS": {
             "Phase2Spring24LHEGS": {
@@ -72,6 +75,47 @@
                         "pre-cmsRun": [],
                         "post-cmsRun": [],
                         "cmssw": []
+                  }
+            }, 
+            "inputs140X": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_2_0_pre2",
+                  "CUSTOMIZES": {
+                        "cmssw": [
+                              "git cms-checkout-topic -u p2l1pfp:L1PF_14_2_X",
+                              "git clone https://github.com/p2l1pfp/FastPUPPI.git -b 14_2_X",
+                              "sed -i \"s|/store/mc/Phase2Spring24DIGIRECOMiniAOD/TTToSemileptonic_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/2820000/5b6178a7-19bf-4f7f-af63-5bab03393e54|file:${CMSSW_BASE}/../Phase2Spring24DIGIRECOMiniAODStep1|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py",
+                              "sed -i \"s|process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20))|process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py",
+                              "scram b -j8"
+                              ],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [
+                              "cmsRun $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py"
+                        ]
+                  }
+            },
+            "perfNano": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_15_1_0_pre4",
+                  "CUSTOMIZES": {
+                        "cmssw": [
+                              "git cms-checkout-topic -u p2l1pfp:L1PF_15_1_X",
+                              "git cms-checkout-topic -u pviscone:newCaloCalibs",
+                              "git clone https://github.com/p2l1pfp/FastPUPPI.git -b 15_1_X",
+                              "sed -i \"s|inputs125X|${CMSSW_BASE}/../inputs140X|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'noResp()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addGenLep([11,22])' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addTkEG()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addHGCalTPs()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addStaEG()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addDecodedTk()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addDecodedCalo()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "scram b -j8"
+                              ],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [
+                              "cmsRun $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py"
+                        ]
                   }
             }
       }
