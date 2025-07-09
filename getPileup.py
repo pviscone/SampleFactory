@@ -40,7 +40,7 @@ class GetPileup:
         req_frags = ["DRPremix"]
         pileup_dataset = []
         for wf_idx, (wf, cfg) in enumerate(workflows.items()):
-            OPTIONS = cfg["OPTIONS"]
+            OPTIONS = cfg.get("OPTIONS",{})
 
             for opt_name, opt_value in OPTIONS.items():
                 if opt_name == "pileup_input":
