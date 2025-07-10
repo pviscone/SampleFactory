@@ -74,7 +74,8 @@
                   "CUSTOMIZES": {
                         "pre-cmsRun": [],
                         "post-cmsRun": [],
-                        "cmssw": []
+                        "cmssw": [],
+                        "keep": false
                   }
             }, 
             "inputs140X": {
@@ -91,7 +92,8 @@
                         "pre-cmsRun": [],
                         "post-cmsRun": [
                               "cmsRun $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py"
-                        ]
+                        ],
+                        "keep": false
                   }
             },
             "perfNano": {

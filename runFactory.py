@@ -128,6 +128,7 @@ class SubmitFactory:
 
             give_fragment = any(req_frag in wf for req_frag in req_frags)
             run_writes.extend(CUSTOMIZES.get("pre-cmsRun", [])) 
+            previous_wf = list(workflows.keys())[wf_idx - 1]
             if OPTIONS:
                 if give_fragment:
                     fragment_path = os.path.join("Configuration", "GenProduction", "python")
@@ -141,10 +142,10 @@ class SubmitFactory:
                     cmsdriver_writes.append(
                         f' --customise_commands "from IOMC.RandomEngine.RandomServiceHelper import RandomNumberServiceHelper; randSvc = RandomNumberServiceHelper(process.RandomNumberGeneratorService); randSvc.populate();"'
                     )
+                    previous_wf = None
                 else:
                     cmsdriver_writes.append(f"{wf}")
                     cmsdriver_writes.append(f"-n -1")
-                    previous_wf = list(workflows.keys())[wf_idx - 1]
                     cmsdriver_writes.append(f"--filein file:{previous_wf}.root")
                 cmsdriver_writes.append(f"--fileout file:{wf}.root")
                 cmsdriver_writes.append(f"--python_filename {wf}.py")
@@ -197,6 +198,10 @@ class SubmitFactory:
                     run_writes.append(f"done")
 
             run_writes.extend(CUSTOMIZES.get("post-cmsRun", [])) 
+            if previous_wf not in keeps and previous_wf is not None and (wf_idx+1) != len(workflows):
+                run_writes.append(f"rm {previous_wf}.root")
+            if not CUSTOMIZES.get("keep", True) and (wf_idx+1) != len(workflows):
+                run_writes.append(f"rm -rf {CMSSW_VERSION}")
             run_writes.append(f"####################################\n")
 
         run_writes.append(f"####################################")
