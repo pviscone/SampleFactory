@@ -123,9 +123,11 @@ It has to be given with following arguments :
 
 - `--crab` : Enable crab submission
 
-- `--memory (int)` : memory assign to each job
+- `--memory` : memory assign to each job in MB (Default: 10000)
 
-- `--flavor` : (For HTCondor submission only) Flavour of the job
+- `--flavor` : (For HTCondor submission only) Flavor of the job (Default: tomorrow)
+
+- `--minutes` : (For Crab submission only) Maximum number of runtime minutes for each job (Default: 2700)
 
 - `--test` : One can test the scripts by giving this option before deploying massive jobs to condor. But try to give small `--nevents` if this is the case as you would probably not want to produce too many events locally. (Together with `--crab`, it will run `crab submit --dry-run`)
 
