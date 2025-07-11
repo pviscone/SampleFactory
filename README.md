@@ -1,13 +1,6 @@
-# Release Notes
-
-Please check [link](https://gitlab.cern.ch/shjeon/sample_factory/-/releases).
-
-- 2024/10/08 : v1.0
-- 2024/10/01 : v1.0.beta
-
 # Sample Factory
 
-These set of scripts faciliate the production of private MC samples for CMS analyses (and possibly extend to other use cases in the future). Most of it is copy pasted ~~by hand~~ from McM website [link](https://cms-pdmv-prod.web.cern.ch/mcm/) but organized in JSON format for easier maintenance purposes. As there is no automatized way to parse the chains from McM, it needs to be maintained from time to time by hand.
+These set of scripts facilitate the production of private MC samples for CMS analyses (and possibly extend to other use cases in the future). Most of it is copy pasted ~~by hand~~ from McM website [link](https://cms-pdmv-prod.web.cern.ch/mcm/) but organized in JSON format for easier maintenance purposes. As there is no automatized way to parse the chains from McM, it needs to be maintained from time to time by hand.
 
 The repository consists of several main parts :
 
@@ -21,11 +14,7 @@ These will be described with a little more details below.
 
 Keep in mind that the strings in scripts below covered with `$` such as `$THIS$` has to be replaced with user's own configuration.
 
-Comments/feedbacks will be appreciated.
-- email : shjeon@NOSPAMcern.ch
-- skype : sihyun_jeon
-
-**Also note that sample production might be computationally heavy job. So just becareful when trying to massively produce samples as it can bottleneck the whole server affecting other people's jobs.**
+**Also note that sample production might be computationally heavy job. So just be careful when trying to massively produce samples as it can bottleneck the whole server affecting other people's jobs.**
 
 # Running the Sample Factory
 
@@ -40,12 +29,26 @@ If you are unsure on what to do, easiest way to start is by copy pasting below t
 
 ```
 {
-    "XROOTD_HOST" : "root://eosuser.cern.ch/",
-    "LFN_PATH" : "/eos/user/s/simpson"
+    "AccountingGroup": "group_u_CMST3.all",
+    "XROOTD_HOST" : "root://eoscms.cern.ch/",
+    "LFN_PATH" : "/eos/cms/store/cmst3/group/l1tr/pviscone",
+    "CRAB_SITE": "T2_CH_CERN",
+    "CRAB_PATH": "/store/group/cmst3/group/l1tr/pviscone",
+    "git_username": "pviscone",
+    "git_name": "Piero Viscone",
+    "git_mail": "piero.viscone@cern.ch"
 }
 ```
 
-I do not have access to most of CMS servers so questions on `XROOTD_HOST` or `LFN_PATH` other than LXPLUS is something that I am not able answer (consult with your server maintenance team).
+If you want to run the submission on HTCondor you can setup
+- AccountingGroup: Your accounting group (Optional, if you don't have one just remove the field)
+- XROOTD_HOST: The EOS XRootD host were you want to copy your output files
+- LFN_PATH : The EOS XRootD path were you want to copy your output files
+
+If you want to run the submission on CRAB:
+- CRAB_SITE: Where to copy your output files
+- CRAB_PATH: Path in the CRAB_SITE where to copy your output files
+- git_username, git_name, git_mail : Some git functionalities may need to configure git on the crab machine. To allow this you can put your git info here
 
 ## Environment Setup
 
@@ -86,6 +89,21 @@ Note that for normal users who are not so familiar with the production workflow 
 
 - `KEEPS` : This defines which step of the output will be kept. For example, if `STEPS` is defined as `["STEP1", "STEP2", "STEP3", "STEP4"]` and `KEEPS` is defined as `["STEP1", "STEP3"]`, outputs from `STEP1` and `STEP3` will only transferred back while the others will be removed after the whole execution finishes.
 
+- `FILES` : If you need to transfer some files to the worker node, you can add it here
+
+### Customization
+You can customize your step before running it
+
+In `CUSTOMIZES` you have 3 options:
+- `cmssw`: list of commands that runs after `cmsenv` but before `scram b` in the `src` directory of the CMSSW release
+- `pre-cmsRun`: list of commands to run in the root of the worker node after the setup of the CMSSW release but before running the `cmsDriver.py` command.
+- `post-cmsRun`: list of commands to run in the root of the worker node at the end of the `cmsDriver.py` command.
+- `keep`: (default=True) By default all the CMSSW are kept on disk but if you want to save space you can delete a release after the end of the workflow step setting up `"keep": false`
+
+N.B 
+1. `OPTION` is optional, if it's not defined no `cmsDriver` command will be run. This is useful if you have a custom CMSSW package and you want to run a script with `cmsRun`. (You have to setup your release in `cmssw` and then insert the `cmsRun` command in `post-cmsRun`
+2. If no `CMSSW_VERSION` is set up, no release will be `cmsrel`led. (But `CMSSW_BASE` will still point to the release used in the previous step)
+
 ## Fragments
 
 `data/fragments/` contains the python configuration files that defines the physics process one wants to produce. In case of samples that requires gridpacks, `ExternalLHEProducer` should be written as well. Take a look at `Fragment` tab in [link](https://cms-pdmv-prod.web.cern.ch/mcm/requests?member_of_chain=GEN-chain_Run3Summer22wmLHEGS_flowRun3Summer22DRPremix_flowRun3Summer22MiniAODv4_flowRun3Summer22NanoAODv12-00184&page=0&shown=262271) as an example.
@@ -103,7 +121,13 @@ It has to be given with following arguments :
 
 - `--njobs` : Number of jobs to submit. Hence, the sample production will in the end return `nevents x njobs` events in total (assuming there is no failure in jobs, filter, or jet matching/merging involved).
 
-- `--test` : One can test the scripts by giving this option before deploying massive jobs to condor. But try to give small `--nevents` if this is the case as you would probably not want to produce too many events locally.
+- `--crab` : Enable crab submission
+
+- `--memory (int)` : memory assign to each job
+
+- `--flavor` : (For HTCondor submission only) Flavour of the job
+
+- `--test` : One can test the scripts by giving this option before deploying massive jobs to condor. But try to give small `--nevents` if this is the case as you would probably not want to produce too many events locally. (Together with `--crab`, it will run `crab submit --dry-run`)
 
 ## Chain Collector
 
@@ -125,33 +149,5 @@ Instead of querying the MinBias library for every single job separately (this is
 
 If you do not want to do this, keep in mind that you should always give `--das_premix` when executing `runFactory.py`, otherwise it will be empty with MinBias. But as said above, this will take longer time for the jobs to finish so it's better to collect the list earlier and avoid using `--das_premix`.
 
-# Logs
-- 2025/02/20
-  - Add pileup collector instruction
-  - Remove the pileup txt files (too large to store)
-  - Allow batch choices properly for cmsconnect and lxplus
-
-- 2024/12/10
-  - Better collection of premix library (getPileup.py is much slower but much less failure rates during the job runs)
-  - Automatic reprocessing of premix library failures
-
-- 2024/10/08
-  - Deploying v1.0
-  - NanoAOD fixed : Forcing flat nano instead of edm nano
-
-- 2024/10/01
-  - Deploying v1.0.beta
-  - Rebased the branch to make it clean
-  - Added CI/CD test
-
-- 2024/09/25
-  - Added the chain collector to mine the cmsDriver commands from McM validation script
-  - Added all 2022 and 2023 campaigns available as of today
-  - Added a readme on chain collector
-
-- 2024/09/15
-  - Added Run3Summer22wmLHEGS chain.
-  - Rebuilt the workflow so that it can run the whole step in one go (before it was tedious/annoying as every single step was treated separately).
-  - Deprecated CRAB submission (not sure if I want to revive this) and totally moved to condor.
-
-- Original work started during EXO MC&I convenership for CMS EXO community [link](https://gitlab.cern.ch/cms-exo-mci/EXO-MCsampleProductions/-/tree/master). Also from helpful discussions with Michael Krohn, David Yu, and Sitian Qian.
+# Credits
+Original work from Sihyun Jeon, initially started during EXO MC&I convenership for CMS EXO community [link](https://gitlab.cern.ch/cms-exo-mci/EXO-MCsampleProductions/-/tree/master). Also from helpful discussions with Michael Krohn, David Yu, and Sitian Qian.
