@@ -81,6 +81,9 @@ def CmsDriverParser(line):
             key = arg.lstrip("-")
             next_arg = args[index + 1] if index + 1 < len(args) else None
 
+            if key in ["number", "number_out"]:
+                continue
+
             if key in CUSTOMISERS:
                 veto_customisers = CUSTOMISERS[key]
                 if next_arg and any(next_arg.startswith(veto) for veto in veto_customisers):
