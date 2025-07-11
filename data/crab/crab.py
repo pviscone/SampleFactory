@@ -35,4 +35,4 @@ config.Data.outputDatasetTag = 'SampleFactory'
 config.Data.outLFNDirBase = '@@OUTDIR@@'
 
 config.section_("Site")
-config.Site.storageSite = 'T2_CH_CERN'
+config.Site.storageSite = '@@SITE@@'

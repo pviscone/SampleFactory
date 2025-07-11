@@ -12,6 +12,6 @@ use_x509userproxy = True
 +JobFlavour = "@@flavor@@"
 x509userproxy = @@SUBMITDIR@@/MyProxy
 +SingularityImage = "/cvmfs/singularity.opensciencegrid.org/opensciencegrid/osgvo-@@MyWantOS@@:latest" 
-+AccountingGroup = "group_u_CMST3.all"
+@@AccountingGroup@@
 queue @@queue@@
 

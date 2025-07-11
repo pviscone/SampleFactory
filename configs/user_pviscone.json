@@ -1,6 +1,8 @@
 {
+    "AccountingGroup": "group_u_CMST3.all",
     "XROOTD_HOST" : "root://eoscms.cern.ch/",
     "LFN_PATH" : "/eos/cms/store/cmst3/group/l1tr/pviscone",
+    "CRAB_SITE": "T2_CH_CERN",
     "CRAB_PATH": "/store/group/cmst3/group/l1tr/pviscone",
     "git_username": "pviscone",
     "git_name": "Piero Viscone",
