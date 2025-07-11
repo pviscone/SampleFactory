@@ -67,9 +67,11 @@ class SubmitFactory:
         self.files = chain_json.get("FILES",[])
 
         user_json = self.__read_JSON(f"configs/user_{self.MY_NAME}.json")
-        self.XROOTD_HOST = user_json["XROOTD_HOST"]
-        self.LFN_PATH = user_json["LFN_PATH"]
-        self.CRAB_PATH = user_json["CRAB_PATH"]
+        self.XROOTD_HOST = user_json.get("XROOTD_HOST", None)
+        self.LFN_PATH = user_json.get("LFN_PATH", None)
+        self.CRAB_PATH = user_json.get("CRAB_PATH", None)
+        self.CRAB_SITE = user_json.get("CRAB_SITE", None)
+        self.AccountingGroup = user_json.get("AccountingGroup", None)
 
         self.__validate_JOBS(steps=steps, workflows=workflows, keeps=keeps)
         if self.ARGS["fragment"]:
@@ -94,7 +96,7 @@ class SubmitFactory:
         run_writes = []
         run_writes.append(f"#!/usr/bin/env bash\n")
         run_writes.append(f"cat /etc/os-release\n")
-        if self.ARGS["crab"]:
+        if self.ARGS["crab"] and all([git_cfg in user_json for git_cfg in ["git_name", "git_mail", "git_username"]]):
             run_writes.append(f'git config --global user.name \'{user_json["git_name"]}\'')
             run_writes.append(f'git config --global user.email \'{user_json["git_mail"]}\'')
             run_writes.append(f'git config --global user.github {user_json["git_username"]}')
@@ -259,7 +261,14 @@ class SubmitFactory:
             os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/condor.jds")
             os.system(f"sed -i 's|@@MyWantOS@@|{os_version}|g' {self.SUBMITDIR}/condor.jds")
             os.system(f"sed -i 's|@@queue@@|" + self.ARGS["njobs"] + f"|g' {self.SUBMITDIR}/condor.jds")
-            os.system(f"sed -i 's|@@flavor@@|" + self.ARGS["flavor"] + f"|g' {self.SUBMITDIR}/condor.jds")
+            os.system(f"sed -i 's|@@flavor@@|" + self.ARGS["flavor"] + f"|g' {self.SUBMITDIR}/condor.jds")            
+
+
+            if self.AccountingGroup:
+                os.system(f"sed -i 's|@@AccountingGroup@@|+AccountingGroup = \"{self.AccountingGroup}\"|g' {self.SUBMITDIR}/condor.jds")
+            else:
+                os.system(f"sed -i '/@@AccountingGroup@@/d' {self.SUBMITDIR}/condor.jds")
+                
 
             os.chdir(self.SUBMITDIR)
             if self.ARGS["test"]:
@@ -281,6 +290,7 @@ class SubmitFactory:
             os.system(f"sed -i 's|@@njobs@@|" + self.ARGS["njobs"] + f"|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@nevents@@|" + self.ARGS["nevents"] + f"|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@OUTDIR@@|{self.CRAB_PATH}/SampleFactory|g' {self.SUBMITDIR}/crab.py")
+            os.system(f"sed -i 's|@@SITE@@|{self.CRAB_SITE}|g' {self.SUBMITDIR}/crab.py")
 
             outfiles = '"' + '","'.join([f'{k}.root' for k in self.keeps[:-1]]) + '"'
             os.system(f"sed -i 's|@@output_files@@|{outfiles}|g' {self.SUBMITDIR}/crab.py")
