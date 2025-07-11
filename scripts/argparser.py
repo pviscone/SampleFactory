@@ -37,8 +37,11 @@ def ArgParser(file_name):
     parser.add_argument("--condor_log", required=False, action="store_true", default=False)
     parser.add_argument("--force", required=False, action="store_true", default=False) # FIXME forgot the use case for now
     parser.add_argument("--das_premix", required=False, action="store_true", default=False)
-    parser.add_argument("--flavor", required=False, type=str, default="tomorrow", help="condor job flavor")
-    parser.add_argument("--memory", required=False, type=str, default="16000", help="condor job memory")
+    parser.add_argument("--flavor", required=False, type=str, default="tomorrow",
+                        help="condor job flavor") 
+    parser.add_argument("--minutes", required=False, type=int, default=2700,
+                        help="crab max job runtime in minutes")
+    parser.add_argument("--memory", required=False, type=int, default=10000, help="job memory")
     parser.add_argument("--name", required=False, type=str, default=None, help="job name")
 
     args = parser.parse_args()

@@ -22,6 +22,9 @@ class SubmitFactory:
         self.BASE_OS = []
 
         self.ARGS = vars(ArgParser(__file__))
+        self.ARGS["memory"] = str(self.ARGS["memory"])
+        self.ARGS["minutes"] = str(self.ARGS["minutes"])
+        
         self.__validate_ARGS()
 
         self.__prepare_JOBS()
@@ -254,6 +257,19 @@ class SubmitFactory:
         if self.ARGS["fragment"]:
             files.append(f"{self.SUBMITDIR}/fragment.py")
         if not self.ARGS["crab"]:
+            assert self.ARGS["flavor"] in ["espresso", "microcentury", "longlunch",
+                                           "workday", "tomorrow", "testmatch", "nextweek"],f"""
+            {self.ARGS['flavor']} is not a valid flavor.
+
+            espresso     = 20 minutes
+            microcentury = 1 hour
+            longlunch    = 2 hours
+            workday      = 8 hours
+            tomorrow     = 1 day
+            testmatch    = 3 days
+            nextweek     = 1 week
+            """
+
             os.system(f"cp {self.FACTORY}/data/condor/" + self.ARGS["host"] + f"/condor.jds {self.SUBMITDIR}/")
             os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/condor.jds")
             os.system(f"sed -i 's|@@RequestMemory@@|" + self.ARGS["memory"] + f"|g' {self.SUBMITDIR}/condor.jds")
@@ -286,6 +302,7 @@ class SubmitFactory:
             os.system(f"cp {self.FACTORY}/data/crab/crab.py {self.SUBMITDIR}/")
             os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@RequestMemory@@|" + self.ARGS["memory"] + f"|g' {self.SUBMITDIR}/crab.py")
+            os.system(f"sed -i 's|@@minutes@@|" + self.ARGS["minutes"] + f"|g' {self.SUBMITDIR}/crab.py")
             files = '"' +  '","'.join(files) +'"'
             os.system(f"sed -i 's|@@transfer_input_files@@|{files}|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/crab.py")

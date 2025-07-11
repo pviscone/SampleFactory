@@ -14,7 +14,7 @@ config.JobType.pluginName = 'PrivateMC'
 config.JobType.allowUndistributedCMSSW = True
 config.JobType.numCores = 4
 config.JobType.maxMemoryMB = @@RequestMemory@@
-config.JobType.maxJobRuntimeMin = 2700
+config.JobType.maxJobRuntimeMin = @@minutes@@
 
 
 config.JobType.scriptExe = "@@SUBMITDIR@@/run.sh"
