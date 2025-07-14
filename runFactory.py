@@ -332,8 +332,11 @@ class SubmitFactory:
             else:
                 os.system(f"sed -i '/@@WHITELIST@@/d' {self.SUBMITDIR}/crab.py")
 
-            outfiles = '"' + '","'.join([f'{k}.root' for k in self.keeps[:-1]]) + '"'
-            os.system(f"sed -i 's|@@output_files@@|{outfiles}|g' {self.SUBMITDIR}/crab.py")
+            outfiles = '","'.join([f'{k}.root' for k in self.keeps[:-1]])
+            if outfiles:
+                os.system(f"sed -i 's|@@output_files@@|{outfiles}|g' {self.SUBMITDIR}/crab.py")
+            else:
+                os.system(f"sed -i '/@@output_files@@/d' {self.SUBMITDIR}/crab.py")
 
             #run.sh
             os.system(f"sed -i 's|cmsrel|scramv1 project|g' {self.SUBMITDIR}/run.sh")

@@ -21,7 +21,7 @@ config.JobType.scriptExe = "@@SUBMITDIR@@/run.sh"
 # hadd nano will not be needed once nano tools are in cmssw
 config.JobType.inputFiles = [@@transfer_input_files@@]
 config.JobType.psetName = "PSet.py"
-config.JobType.outputFiles = [@@output_files@@]
+config.JobType.outputFiles = ["@@output_files@@"]
 
 config.section_("Data")
 
