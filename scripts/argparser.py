@@ -43,6 +43,8 @@ def ArgParser(file_name):
                         help="crab max job runtime in minutes")
     parser.add_argument("--memory", required=False, type=int, default=10000, help="job memory")
     parser.add_argument("--name", required=False, type=str, default=None, help="job name")
+    parser.add_argument("--blacklist", required="", type=str, default=None, help="Sites to blacklist (comma separated)")
+    parser.add_argument("--whitelist", required="", type=str, default=None, help="Sites to whitelist (comma separated)")
 
     args = parser.parse_args()
 

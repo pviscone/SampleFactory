@@ -35,4 +35,6 @@ config.Data.outputDatasetTag = 'SampleFactory'
 config.Data.outLFNDirBase = '@@OUTDIR@@'
 
 config.section_("Site")
+config.Site.blacklist(["@@BLACKLIST@@"])
+config.Site.whitelist(["@@WHITELIST@@"])
 config.Site.storageSite = '@@SITE@@'

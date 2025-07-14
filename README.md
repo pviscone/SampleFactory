@@ -132,6 +132,10 @@ It has to be given with following arguments :
 
 - `--test` : One can test the scripts by giving this option before deploying massive jobs to condor. But try to give small `--nevents` if this is the case as you would probably not want to produce too many events locally. (Together with `--crab`, it will run `crab submit --dry-run`)
 
+- `--blacklist`: (For crab submission only) Comma separated string of sites to blacklist
+
+- `--whitelist`: (For crab submission only) Comma separated string of sites to whitelist
+
 ## Chain Collector
 
 `getChains.py` takes the list of PrepIds as an input defined in JSON format in `data/prepids`. It takes the McM validation script of the given PrepId, parse options for the cmsDriver.py command in a rough text based way, and prepares a JSON file which contains the full production chain information as in the files existing in `data/chains/` repository. You can test it via following command. This is to avoid human error (looking at McM, copying every single option one by one by hand, pasting it in your terminal) and semi-automatically do the work for you. Depending on the development of McM, this might not work as McM validation scripts can evolve throughout time (and please let me know if that is the case!).

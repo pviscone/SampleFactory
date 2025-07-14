@@ -310,6 +310,15 @@ class SubmitFactory:
             os.system(f"sed -i 's|@@nevents@@|" + self.ARGS["nevents"] + f"|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@OUTDIR@@|{self.CRAB_PATH}/SampleFactory|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@SITE@@|{self.CRAB_SITE}|g' {self.SUBMITDIR}/crab.py")
+            if self.ARGS["blacklist"]:
+                os.system(f"sed -i 's|@@BLACKLIST@@|" + self.ARGS["blacklist"].replace(',','","') + f"|g' {self.SUBMITDIR}/crab.py")
+            else:
+                os.system(f"sed -i '/@@BLACKLIST@@/d' {self.SUBMITDIR}/crab.py")
+
+            if self.ARGS["whitelist"]:
+                os.system(f"sed -i 's|@@WHITELIST@@|" + self.ARGS["whitelist"].replace(',','","') + f"|g' {self.SUBMITDIR}/crab.py")
+            else:
+                os.system(f"sed -i '/@@WHITELIST@@/d' {self.SUBMITDIR}/crab.py")
 
             outfiles = '"' + '","'.join([f'{k}.root' for k in self.keeps[:-1]]) + '"'
             os.system(f"sed -i 's|@@output_files@@|{outfiles}|g' {self.SUBMITDIR}/crab.py")
