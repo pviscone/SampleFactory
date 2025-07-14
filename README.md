@@ -99,6 +99,7 @@ In `CUSTOMIZES` you have 3 options:
 - `pre-cmsRun`: list of commands to run in the root of the worker node after the setup of the CMSSW release but before running the `cmsDriver.py` command.
 - `post-cmsRun`: list of commands to run in the root of the worker node at the end of the `cmsDriver.py` command.
 - `keep`: (default=True) By default all the CMSSW are kept on disk but if you want to save space you can delete a release after the end of the workflow step setting up `"keep": false`
+- `keep_input`: (default=False) By default, if the previous step output in not in `KEEPS`, it is deleted after the end of the STEP. If you want to keep it, add `"keep_input": true`
 
 N.B 
 1. `OPTION` is optional, if it's not defined no `cmsDriver` command will be run. This is useful if you have a custom CMSSW package and you want to run a script with `cmsRun`. (You have to setup your release in `cmssw` and then insert the `cmsRun` command in `post-cmsRun`

@@ -205,7 +205,7 @@ class SubmitFactory:
                     run_writes.append(f"done")
 
             run_writes.extend(CUSTOMIZES.get("post-cmsRun", [])) 
-            if previous_wf not in keeps and previous_wf is not None and (wf_idx+1) != len(workflows):
+            if previous_wf not in keeps and previous_wf is not None and (wf_idx+1) != len(workflows) and not CUSTOMIZES.get("keep_input", False):
                 run_writes.append(f"rm {previous_wf}.root")
             if not CUSTOMIZES.get("keep", True) and (wf_idx+1) != len(workflows):
                 run_writes.append(f"rm -rf {CMSSW_VERSION}")
