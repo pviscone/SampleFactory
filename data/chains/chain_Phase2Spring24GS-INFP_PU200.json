@@ -1,0 +1,95 @@
+{
+      "FILES": [],
+      "STEPS": [
+            "Phase2Spring24LHEGS",
+            "Phase2Spring24DIGIRECOMiniAOD",
+            "Phase2Spring24DIGIRECOMiniAODStep1",
+            "inputs140X"
+      ],
+      "KEEPS": [
+            "inputs140X"
+      ],
+      "WORKFLOWS": {
+            "Phase2Spring24LHEGS": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_9",
+                  "OPTIONS": {
+                        "eventcontent": "FEVTDEBUG",
+                        "datatier": "GEN-SIM",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "beamspot": "HLLHC14TeV",
+                        "step": "GEN,SIM",
+                        "geometry": "Extended2026D110",
+                        "era": "Phase2C17I13M9",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": []
+                  }
+            },
+            "Phase2Spring24DIGIRECOMiniAOD": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_9",
+                  "OPTIONS": {
+                        "eventcontent": "FEVTDEBUGHLT",
+                        "pileup": "AVE_200_BX_25ns",
+                        "customise": "SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000,SimGeneral/MixingModule/customiseStoredTPConfig.higherPtTP,Configuration/DataProcessing/Utils.addMonitoring",
+                        "datatier": "GEN-SIM-DIGI-RAW",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "customise_commands": "\"process.FEVTDEBUGHLToutput.outputCommands.append('keep *_l1tSC8PFL1PuppiCorrectedEmulator_*_HLT')\"",
+                        "step": "DIGI:pdigi_valid,L1TrackTrigger,L1,DIGI2RAW,HLT:@relval2026",
+                        "geometry": "Extended2026D110",
+                        "nStreams": "2",
+                        "era": "Phase2C17I13M9",
+                        "pileup_input": "dbs:/MinBias_TuneCP5_14TeV-pythia8/Phase2Spring24GS-140X_mcRun4_realistic_v4-v1/GEN-SIM",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": []
+                  }
+            },
+            "Phase2Spring24DIGIRECOMiniAODStep1": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_9",
+                  "OPTIONS": {
+                        "eventcontent": "MINIAODSIM",
+                        "customise": "SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000,Configuration/DataProcessing/Utils.addMonitoring",
+                        "datatier": "GEN-SIM-DIGI-RAW-MINIAOD",
+                        "inputCommands": "\"keep *\"",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "customise_commands": "\"process.MINIAODSIMoutput.outputCommands.append('keep *_*_*_HLT'); process.MINIAODSIMoutput.outputCommands.append('keep *_*_*_SIM');\"",
+                        "step": "RAW2DIGI,RECO,RECOSIM,PAT",
+                        "geometry": "Extended2026D110",
+                        "nStreams": "2",
+                        "era": "Phase2C17I13M9",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": [],
+                        "keep": false
+                  }
+            },
+            "inputs140X": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_2_0_pre2",
+                  "CUSTOMIZES": {
+                        "cmssw": [
+                              "git cms-checkout-topic -u p2l1pfp:L1PF_14_2_X",
+                              "git clone https://github.com/p2l1pfp/FastPUPPI.git -b 14_2_X",
+                              "sed -i \"s|/store/mc/Phase2Spring24DIGIRECOMiniAOD/TTToSemileptonic_TuneCP5_14TeV-powheg-pythia8/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v2/2820000/5b6178a7-19bf-4f7f-af63-5bab03393e54|file:${CMSSW_BASE}/../Phase2Spring24DIGIRECOMiniAODStep1|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py",
+                              "sed -i \"s|process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20))|process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py"
+                              ],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [
+                              "cmsRun $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py"
+                        ]
+                  }
+            }
+      }
+}
