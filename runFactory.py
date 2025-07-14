@@ -298,6 +298,18 @@ class SubmitFactory:
             else:
                 os.system(f"condor_submit {self.SUBMITDIR}/condor.jds")
             os.chdir(self.FACTORY)
+
+            print("\n------------------- SUBMIT SETTINGS -------------------\n")
+            os.system(f"cat {self.SUBMITDIR}/condor.jds")
+
+            print("\n----------------------- RUN.SH ------------------------\n")
+            os.system(f"cat {self.SUBMITDIR}/run.sh")
+
+            confirmation = input("Do you want to submit? (y/n) ")
+            if confirmation.lower()!="y":
+                os.system(f"rm -rf {self.SUBMITDIR}")
+                return
+
         else:
             os.system(f"cp {self.FACTORY}/data/crab/crab.py {self.SUBMITDIR}/")
             os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/crab.py")
@@ -336,6 +348,17 @@ class SubmitFactory:
             if self.ARGS["test"]:
                 Logger.INFO(f"Testing the submission script in {self.SUBMITDIR} (dryrun)")
                 os.system(f"sed -i 's|crab submit -c crab.py|crab submit -c crab.py --dryrun|g' {self.SUBMITDIR}/crab_submit.sh")
+
+            print("\n------------------- SUBMIT SETTINGS -------------------\n")
+            os.system(f"cat {self.SUBMITDIR}/crab.py")
+
+            print("\n----------------------- RUN.SH ------------------------\n")
+            os.system(f"cat {self.SUBMITDIR}/run.sh")
+
+            confirmation = input("Do you want to submit? (y/n) ")
+            if confirmation.lower()!="y":
+                os.system(f"rm -rf {self.SUBMITDIR}")
+                return
             os.system(f"cd {self.SUBMITDIR}; ./crab_submit.sh")
                 
 if __name__ == "__main__":
