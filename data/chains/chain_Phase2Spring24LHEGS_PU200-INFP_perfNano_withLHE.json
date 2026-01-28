@@ -103,7 +103,7 @@
                         "cmssw": [
                               "git cms-checkout-topic -u p2l1pfp:L1PF_15_1_X",
                               "git cms-checkout-topic -u pviscone:newCaloCalibs",
-                              "git clone https://github.com/p2l1pfp/FastPUPPI.git -b 15_1_X",
+                              "git clone https://github.com/pviscone/FastPUPPI.git -b pv-tkEleRegrTemp",
                               "sed -i \"s|inputs125X|${CMSSW_BASE}/../inputs140X|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
                               "echo 'noResp()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
                               "echo 'addTkEG()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
