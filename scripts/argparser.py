@@ -49,12 +49,14 @@ def ArgParser(file_name):
     args = parser.parse_args()
 
     if args.host == "":
-        this_host = os.getenv("HOSTNAME")
+        args.host = "base"
+        """
         if "login.uscms.org" in this_host:
             args.host = "cmsconnect"
         elif "lxplus" in this_host:
             args.host = "lxplus"
         else:
             args.host = "base"
+        """
     return args
 
