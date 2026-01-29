@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 
-gridpackPath="root://eoscms.cern.ch//eos/cms/store/cmst3/group/l1tr/pviscone/Scouting/gridpacks/Xee/v2/Mass15_el8_amd64_gcc12_CMSSW_15_0_2_tarball.tar.xz"
+gridpackPath="root://eoscms.cern.ch//eos/cms/store/cmst3/group/l1tr/pviscone/Scouting/gridpacks/Xee/v3/Mass15_el8_amd64_gcc12_CMSSW_15_0_2_tarball.tar.xz"
 
 externalLHEProducer = cms.EDProducer("ExternalLHEProducer",
     args = cms.vstring(gridpackPath),
