@@ -103,6 +103,12 @@ class SubmitFactory:
             run_writes.append(f'git config --global user.name \'{user_json["git_name"]}\'')
             run_writes.append(f'git config --global user.email \'{user_json["git_mail"]}\'')
             run_writes.append(f'git config --global user.github {user_json["git_username"]}')
+        if user_json.get("envs", False):
+            if not isinstance(user_json["envs"], dict):
+                raise TypeError("envs in user json must be a dict")
+            for k,v in user_json["envs"].items():
+                run_writes.append(f"export {k}='{v}'")    
+            
         run_writes.append("echo 'JOBINDEX ===>' ${PROCID}\n")
         run_writes.append(f"source /cvmfs/cms.cern.ch/cmsset_default.sh\n")
         # steps that requires fragments as inputs (root requests)

@@ -6,5 +6,8 @@
     "CRAB_PATH": "/store/group/cmst3/group/l1tr/pviscone",
     "git_username": "pviscone",
     "git_name": "Piero Viscone",
-    "git_mail": "piero.viscone@cern.ch"
+    "git_mail": "piero.viscone@cern.ch",
+    "envs":{
+        "GITLAB_TOKEN": "<ADD_YOUR_TOKEN>"
+    }
 }
