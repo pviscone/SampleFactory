@@ -1,21 +1,17 @@
 #!/usr/bin/bash
 
-export FACTORY=$(pwd)
+export CURRENT=$(pwd)
+export FACTORY=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
-if [ ! $CI ]; then
-    export CI=false
-fi
+export PATH="$FACTORY:$PATH"
+
 source ${FACTORY}/scripts/yoda.sh
 
 echo "--- SampleFactory is at $FACTORY"
 sleep 2
 echo ""
 
-if [ $CI = true ]; then
-    export USER="simpson"
-fi
-
-if [ ! -e "configs/user_${USER}.json" ]; then
+if [ ! -e "$FACTORY/configs/user_${USER}.json" ]; then
     echo "--- configs/user_${USER}.json is not found!"
     echo "--- Go back to the README instructions"
     sleep 3
@@ -41,11 +37,7 @@ fi
 source /cvmfs/cms.cern.ch/cmsset_default.sh
 cd /cvmfs/cms.cern.ch/${SCRAM_ARCH}/cms/cmssw/${CMSSW_VERSION}/src
 eval `scram runtime -sh`
-cd $FACTORY
+cd $CURRENT
 
-if [ $CI = false ]; then
-    echo ""
-    voms-proxy-init --voms cms --valid 192:00
-    echo ""
-fi
+voms-proxy-init --voms cms --valid 192:00
 
