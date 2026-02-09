@@ -36,7 +36,10 @@ If you are unsure on what to do, easiest way to start is by copy pasting below t
     "CRAB_PATH": "/store/group/cmst3/group/l1tr/pviscone",
     "git_username": "pviscone",
     "git_name": "Piero Viscone",
-    "git_mail": "piero.viscone@cern.ch"
+    "git_mail": "piero.viscone@cern.ch".
+    "envs":{
+        "key": "value"
+    }
 }
 ```
 
@@ -44,6 +47,8 @@ If you want to run the submission on HTCondor you can setup
 - AccountingGroup: Your accounting group (Optional, if you don't have one just remove the field)
 - XROOTD_HOST: The EOS XRootD host were you want to copy your output files
 - LFN_PATH : The EOS XRootD path were you want to copy your output files
+- envs: Dictionary of env variables that will be set at the beginning of the script (Optional)
+
 
 If you want to run the submission on CRAB:
 - CRAB_SITE: Where to copy your output files
@@ -157,4 +162,6 @@ Instead of querying the MinBias library for every single job separately (this is
 If you do not want to do this, keep in mind that you should always give `--das_premix` when executing `runFactory.py`, otherwise it will be empty with MinBias. But as said above, this will take longer time for the jobs to finish so it's better to collect the list earlier and avoid using `--das_premix`.
 
 # Credits
+CRAB submissions and some other features and cli arguments implemented by Piero Viscone.
+
 Original work from Sihyun Jeon, initially started during EXO MC&I convenership for CMS EXO community [link](https://gitlab.cern.ch/cms-exo-mci/EXO-MCsampleProductions/-/tree/master). Also from helpful discussions with Michael Krohn, David Yu, and Sitian Qian.
