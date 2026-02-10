@@ -23,7 +23,10 @@ def ArgParser(file_name):
     parser.add_argument("-f", "--fragment", required=required_fragment, type=str,
                         help="Fragment file to use for sample production"
                         )
-    parser.add_argument("-n", "--nevents", required=required_nevents, type=str,
+    parser.add_argument("-n", "--nevents", required=False, type=str,
+                        help="Number of events to submit per job"
+                        )
+    parser.add_argument("-o", "--nout", required=False, type=str,
                         help="Number of events to submit per job"
                         )
     parser.add_argument("-j", "--njobs", required=required_njobs, type=str,
@@ -48,6 +51,8 @@ def ArgParser(file_name):
     parser.add_argument("--whitelist", required="", type=str, default=None, help="Sites to whitelist (comma separated)")
 
     args = parser.parse_args()
+
+    assert not (args.nevents is None and args.nout is None), "At least one of --nout or --nevents is needed"
 
     if args.host == "":
         args.host = "base"

@@ -125,6 +125,8 @@ It has to be given with following arguments :
 
 - `--nevents` : Number of events to produce per job.
 
+- `--nout` : Number of events that pass the gen filters to generate (at least one between `--nevents` and `--nout` is needed)
+
 - `--njobs` : Number of jobs to submit. Hence, the sample production will in the end return `nevents x njobs` events in total (assuming there is no failure in jobs, filter, or jet matching/merging involved).
 
 - `--crab` : Enable crab submission

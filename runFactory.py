@@ -41,8 +41,6 @@ class SubmitFactory:
     def __validate_ARGS(self):
         if not os.path.exists(self.ARGS["chain"]):
             Logger.ERROR(self.ARGS["chain"] + " does not exist")
-        if int(self.ARGS["nevents"]) > 5000:
-            Logger.WARNING(self.ARGS["nevents"] + " larger than 5000, jobs might take too long to finish before condor walltime")
         if os.getenv("ProcId"):
             self.PROCID = os.getenv("ProcId")
         else:
@@ -151,7 +149,12 @@ class SubmitFactory:
                     run_writes.append(f"scram b")
                     run_writes.append(f"cd ../..\n")
                     cmsdriver_writes.append(f"{fragment_path}/fragment.py")
-                    cmsdriver_writes.append(f"-n " + self.ARGS["nevents"])
+                
+                    if self.ARGS["nevents"]:
+                        cmsdriver_writes.append(f"-n " + self.ARGS["nevents"])
+                    if self.ARGS["nout"]:
+                        cmsdriver_writes.append(f" -o " + self.ARGS["nout"])
+                                        
                     cmsdriver_writes.append(
                         f' --customise_commands "from IOMC.RandomEngine.RandomServiceHelper import RandomNumberServiceHelper; randSvc = RandomNumberServiceHelper(process.RandomNumberGeneratorService); randSvc.populate();"'
                     )
