@@ -311,10 +311,11 @@ class SubmitFactory:
             print("\n----------------------- RUN.SH ------------------------\n")
             os.system(f"cat {self.SUBMITDIR}/run.sh")
 
-            confirmation = input("Do you want to submit? (y/n) ")
-            if confirmation.lower()!="y":
-                os.system(f"rm -rf {self.SUBMITDIR}")
-                return
+            if not self.ARGS["skip_confirm"]:
+                confirmation = input("Do you want to submit? (y/n) ")
+                if confirmation.lower()!="y":
+                    os.system(f"rm -rf {self.SUBMITDIR}")
+                    return
 
         else:
             os.system(f"cp {self.FACTORY}/data/crab/crab.py {self.SUBMITDIR}/")
@@ -364,10 +365,11 @@ class SubmitFactory:
             print("\n----------------------- RUN.SH ------------------------\n")
             os.system(f"cat {self.SUBMITDIR}/run.sh")
 
-            confirmation = input("Do you want to submit? (y/n) ")
-            if confirmation.lower()!="y":
-                os.system(f"rm -rf {self.SUBMITDIR}")
-                return
+            if not self.ARGS["skip_confirm"]:
+                confirmation = input("Do you want to submit? (y/n) ")
+                if confirmation.lower()!="y":
+                    os.system(f"rm -rf {self.SUBMITDIR}")
+                    return
             os.system(f"cd {self.SUBMITDIR}; ./crab_submit.sh")
                 
 if __name__ == "__main__":
