@@ -90,11 +90,11 @@ class SubmitFactory:
 
         self.CHAIN_NAME = os.path.basename(self.ARGS["chain"]).split(".")[0]
         self.JOBDIR = f"{self.FRAGMENT_NAME}/{self.CHAIN_NAME}/{self.TIMESTAMP}"
-        self.SUBMITDIR = f"{self.FACTORY}/jobs/{self.JOBDIR}"
+        self.SUBMITDIR = f"{os.environ['PWD']}/jobs/{self.JOBDIR}"
 
         os.system(f"mkdir -p {self.SUBMITDIR}")
         for file in self.files:
-            os.system(f"cp {self.FACTORY}/data/{file} {self.SUBMITDIR}/{file.rsplit('/',1)[-1]}")
+            os.system(f"cp {os.environ['PWD']}/{file} {self.SUBMITDIR}/{file.rsplit('/',1)[-1]}")
 
         run_writes = []
         run_writes.append(f"#!/usr/bin/env bash\n")
@@ -175,9 +175,13 @@ class SubmitFactory:
                         cmsdriver_writes.append(f"--pileup_input {OPTIONS['pileup_input']}")
                     else:
                         cmsdriver_writes.append(f"--pileup_input filelist:pileup.txt")
-                        if not os.path.exists(f"{self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt"):
+                        if os.path.exists(f"{self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt"):
+                            os.system(f"cp {self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt {self.SUBMITDIR}/pileup.txt")
+                        elif os.path.exists(f"{os.environ['PWD']}/data/pileups/{self.CHAIN_NAME}.txt"):
+                            os.system(f"cp {os.environ['PWD']}/data/pileups/{self.CHAIN_NAME}.txt {self.SUBMITDIR}/pileup.txt")
+                        else:
                             Logger.ERROR(f"could not find {self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt")
-                        os.system(f"cp {self.FACTORY}/data/pileups/{self.CHAIN_NAME}.txt {self.SUBMITDIR}/pileup.txt")
+
                     # ignore log for premix step as it prints out all pileup_input
                     cmsdriver_writes.append("&> /dev/null")
 
