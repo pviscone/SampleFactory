@@ -149,9 +149,8 @@ class SubmitFactory:
                     run_writes.append(f"scram b")
                     run_writes.append(f"cd ../..\n")
                     cmsdriver_writes.append(f"{fragment_path}/fragment.py")
-                
-                    if self.ARGS["nevents"]:
-                        cmsdriver_writes.append(f"-n " + self.ARGS["nevents"])
+
+                    cmsdriver_writes.append(f"-n " + self.ARGS["nevents"])
                     if self.ARGS["nout"]:
                         cmsdriver_writes.append(f" -o " + self.ARGS["nout"])
                                         
