@@ -92,7 +92,7 @@ class SubmitFactory:
 
         os.system(f"mkdir -p {self.SUBMITDIR}")
         for file in self.files:
-            os.system(f"cp {os.environ['PWD']}/{file} {self.SUBMITDIR}/{file.rsplit('/',1)[-1]}")
+            os.system(f"cp {file} {self.SUBMITDIR}")
 
         run_writes = []
         run_writes.append(f"#!/usr/bin/env bash\n")
@@ -331,7 +331,11 @@ class SubmitFactory:
             os.system(f"sed -i 's|@@JobBatchName@@|{self.FRAGMENT_NAME}__{self.CHAIN_NAME}|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@RequestMemory@@|" + self.ARGS["memory"] + f"|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@minutes@@|" + self.ARGS["minutes"] + f"|g' {self.SUBMITDIR}/crab.py")
+
+            files = [f.split(self.SUBMITDIR)[-1].rsplit("/", 1)[-1] for f in files]
+            files = [self.SUBMITDIR+f"/{f}" for f in files]
             files = '"' +  '","'.join(files) +'"'
+
             os.system(f"sed -i 's|@@transfer_input_files@@|{files}|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@SUBMITDIR@@|{self.SUBMITDIR}|g' {self.SUBMITDIR}/crab.py")
             os.system(f"sed -i 's|@@njobs@@|" + self.ARGS["njobs"] + f"|g' {self.SUBMITDIR}/crab.py")
