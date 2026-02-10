@@ -101,6 +101,7 @@ class SubmitFactory:
             run_writes.append(f'git config --global user.name \'{user_json["git_name"]}\'')
             run_writes.append(f'git config --global user.email \'{user_json["git_mail"]}\'')
             run_writes.append(f'git config --global user.github {user_json["git_username"]}')
+
         if user_json.get("envs", False):
             if not isinstance(user_json["envs"], dict):
                 raise TypeError("envs in user json must be a dict")
@@ -153,6 +154,8 @@ class SubmitFactory:
                     cmsdriver_writes.append(f"-n " + self.ARGS["nevents"])
                     if self.ARGS["nout"]:
                         cmsdriver_writes.append(f" -o " + self.ARGS["nout"])
+                    if self.ARGS["nthreads"]:
+                        cmsdriver_writes.append(f" --nThreads " + self.ARGS["nthreads"])
                                         
                     cmsdriver_writes.append(
                         f' --customise_commands "from IOMC.RandomEngine.RandomServiceHelper import RandomNumberServiceHelper; randSvc = RandomNumberServiceHelper(process.RandomNumberGeneratorService); randSvc.populate();"'
