@@ -53,7 +53,7 @@ class CmsDriverCollector:
         return self.workflows
 
 def CmsDriverParser(line):
-    IGNORES = {"python_filename", "filein", "fileout", "n", "no_exec"}
+    IGNORES = {"python_filename", "filein", "fileout", "n", "no_exec", "nThreads"}
     # ignore several customiser commands
     CUSTOMISERS = {
         "customise": ["Configuration/DataProcessing/Utils.addMonitoring"],
