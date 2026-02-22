@@ -158,7 +158,14 @@ class SubmitFactory:
                         cmsdriver_writes.append(f" --nThreads " + self.ARGS["nthreads"])
                                         
                     cmsdriver_writes.append(
-                        f' --customise_commands "from IOMC.RandomEngine.RandomServiceHelper import RandomNumberServiceHelper; randSvc = RandomNumberServiceHelper(process.RandomNumberGeneratorService); randSvc.populate();"'
+                        f' --customise_commands "from IOMC.RandomEngine.RandomServiceHelper import RandomNumberServiceHelper; randSvc = RandomNumberServiceHelper(process.RandomNumberGeneratorService); randSvc.populate();'
+                    )
+                    if self.ARGS["crab"]:
+                        jobId="int(os.environ.get('CRAB_Id',1))"
+                    else:
+                        jobId="int(os.environ.get('PROCID',1))"
+                    cmsdriver_writes.append(
+                        f'import os; process.source.firstLuminosityBlock = cms.untracked.uint32(10000+{jobId});"'
                     )
                     previous_wf = None
                 else:
