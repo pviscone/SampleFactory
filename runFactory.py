@@ -231,6 +231,27 @@ class SubmitFactory:
                 run_writes.append(f"rm {previous_wf}.root")
             if not CUSTOMIZES.get("keep", True) and (wf_idx+1) != len(workflows):
                 run_writes.append(f"rm -rf {CMSSW_VERSION}")
+
+            #Check if output file exists
+            run_writes.append(
+                (
+                f'\nif [ ! -f "{wf}.root" ]; then\n'
+                f'    echo "Error: File {wf}.root not found."\n'
+                 '    exit 1\n'
+                 'fi\n'
+                )
+            )
+
+            #Check if output file has >0 events
+            run_writes.append(
+                (
+                f'ENTRIES=$(root -l -b -q -e \'TFile* f = TFile::Open("{wf}.root"); TTree* t = (TTree*)f->Get("Events"); if(t) printf(\"%lld\", t->GetEntries()); f->Close();\' | tail -n 1)\n'
+                 'if [[ ! "$ENTRIES" =~ ^[0-9]+$ ]] || [ "$ENTRIES" -eq 0 ]; then\n'
+                f'    echo "Error: {wf}.root is an invalid or empty ROOT file (Entries: $ENTRIES)."\n'
+                 '    exit 1\n'
+                 'fi\n'
+                )
+            )   
             run_writes.append(f"####################################\n")
 
         run_writes.append(f"####################################")
