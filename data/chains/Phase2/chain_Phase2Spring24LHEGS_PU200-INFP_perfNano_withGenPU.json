@@ -29,7 +29,8 @@
                   "CUSTOMIZES": {
                         "pre-cmsRun": [],
                         "post-cmsRun": [],
-                        "cmssw": []
+                        "cmssw": [],
+                        "keep": false
                   }
             },
             "Phase2Spring24DIGIRECOMiniAOD": {
