@@ -1,0 +1,130 @@
+{
+      "FILES": [],
+      "STEPS": [
+            "Phase2Spring24LHEGS",
+            "Phase2Spring24DIGIRECOMiniAOD",
+            "Phase2Spring24DIGIRECOMiniAODStep1",
+            "inputs140X",
+            "perfNano"
+      ],
+      "KEEPS": [
+            "inputs140X",
+            "perfNano"
+      ],
+      "WORKFLOWS": {
+            "Phase2Spring24LHEGS": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_9",
+                  "OPTIONS": {
+                        "eventcontent": "FEVTDEBUG,LHE",
+                        "datatier": "GEN-SIM,LHE",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "beamspot": "HLLHC14TeV",
+                        "step": "LHE,GEN,SIM",
+                        "geometry": "Extended2026D110",
+                        "nStreams": "2",
+                        "era": "Phase2C17I13M9",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": []
+                  }
+            },
+            "Phase2Spring24DIGIRECOMiniAOD": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_9",
+                  "OPTIONS": {
+                        "eventcontent": "FEVTDEBUGHLT",
+                        "pileup": "AVE_200_BX_25ns",
+                        "customise": "SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000,Configuration/DataProcessing/Utils.addMonitoring",
+                        "datatier": "GEN-SIM-DIGI-RAW",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "customise_commands": "\"process.FEVTDEBUGHLToutput.outputCommands.append('keep *_l1tSC8PFL1PuppiCorrectedEmulator_*_HLT'); process.puGenParticles = cms.EDProducer('PUGenParticleProducer',src = cms.InputTag('mix', 'generatorSmeared')); from PhysicsTools.PatAlgos.slimming.prunedGenParticles_cfi import prunedGenParticles as _prunedGenParticles; process.puPrunedGenParticles = _prunedGenParticles.clone(src = 'puGenParticles'); process.puGenParticlesTask = cms.Task(process.puGenParticles, process.puPrunedGenParticles);  process.schedule.associate(process.puGenParticlesTask); process.FEVTDEBUGHLToutput.outputCommands.append('keep *_puPrunedGenParticles_*_*')\"",
+                        "step": "DIGI:pdigi_valid,L1TrackTrigger,L1,DIGI2RAW,HLT:@relval2026",
+                        "geometry": "Extended2026D110",
+                        "nStreams": "2",
+                        "era": "Phase2C17I13M9",
+                        "pileup_input": "dbs:/MinBias_TuneCP5_14TeV-pythia8/Phase2Spring24GS-140X_mcRun4_realistic_v4-v1/GEN-SIM",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": [
+                              "git cms-checkout-topic -u francesco-vaselli:PUGenParticles"
+                        ]
+                  }
+            },
+            "Phase2Spring24DIGIRECOMiniAODStep1": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_14_0_9",
+                  "OPTIONS": {
+                        "eventcontent": "MINIAODSIM",
+                        "customise": "SLHCUpgradeSimulations/Configuration/aging.customise_aging_1000,Configuration/DataProcessing/Utils.addMonitoring",
+                        "datatier": "GEN-SIM-DIGI-RAW-MINIAOD",
+                        "inputCommands": "\"keep *\"",
+                        "conditions": "140X_mcRun4_realistic_v4",
+                        "customise_commands": "\"process.MINIAODSIMoutput.outputCommands.append('keep *_*_*_HLT'); process.MINIAODSIMoutput.outputCommands.append('keep *_*_*_SIM'); process.MINIAODSIMoutput.outputCommands.append('keep *_puPrunedGenParticles_*_*')\"",
+                        "step": "RAW2DIGI,RECO,RECOSIM,PAT",
+                        "geometry": "Extended2026D110",
+                        "nStreams": "2",
+                        "era": "Phase2C17I13M9",
+                        "mc": null
+                  },
+                  "CUSTOMIZES": {
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [],
+                        "cmssw": [],
+                        "keep": false
+                  }
+            }, 
+            "inputs140X": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_15_1_0_pre4",
+                  "CUSTOMIZES": {
+                        "cmssw": [
+                              "git cms-checkout-topic -u p2l1pfp:L1PF_15_1_X",
+                              "git clone https://github.com/pviscone/FastPUPPI.git -b pv-GenPUPart",
+                              "sed -i \"s|/store/mc/Phase2Spring24DIGIRECOMiniAOD/SingleElectron_Pt-2To200-gun/GEN-SIM-DIGI-RAW-MINIAOD/PU200_Trk1GeV_140X_mcRun4_realistic_v4-v1/2560000/c598c5a7-d4d8-489d-bbc7-43fe9aa6b350|file:${CMSSW_BASE}/../Phase2Spring24DIGIRECOMiniAODStep1|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py",
+                              "sed -i \"s|process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(20))|process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1))|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py"
+                              ],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [
+                              "cmsRun $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runInputs140X.py"
+                        ],
+                        "keep": false
+                  }
+            },
+            "perfNano": {
+                  "SCRAM_ARCH": "el8_amd64_gcc12",
+                  "CMSSW_VERSION": "CMSSW_15_1_0_pre4",
+                  "CUSTOMIZES": {
+                        "cmssw": [
+                              "git cms-checkout-topic -u pviscone:pv-tkEleRegrTemp-L1PF_15_1_X-from_15_1_0_pre4",
+                              "git clone https://github.com/pviscone/FastPUPPI.git -b pv-GenPUPart",
+                              "sed -i \"s|inputs125X|${CMSSW_BASE}/../inputs140X|g\" $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'noResp()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addTkEG()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addHGCalTPs()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addStaEG()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addDecodedTk()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addDecodedCalo()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addLHEPart()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addGenLep([11,13,22])' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addGenPi()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'saveCands()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'saveGenCands()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addGenJetFlavourTable()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addGenPart()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py",
+                              "echo 'addGenPUPart()' >> $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py"
+                              ],
+                        "pre-cmsRun": [],
+                        "post-cmsRun": [
+                              "cmsRun $CMSSW_BASE/src/FastPUPPI/NtupleProducer/python/runPerformanceNTuple.py"
+                        ]
+                  }
+            }
+      }
+}
